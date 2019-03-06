@@ -27,6 +27,10 @@ public class PersonService{
 		PersonServiceHolder.INSTANCE.persons.add(person);
 	}
 	
+	public static void deleteListPerson() {
+		PersonServiceHolder.INSTANCE.persons.clear();
+	}
+	
 	public static PersonService newInstance() {
 		return PersonServiceHolder.INSTANCE = new PersonService();
 	}

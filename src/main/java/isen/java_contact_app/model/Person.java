@@ -1,5 +1,6 @@
 package isen.java_contact_app.model;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -71,7 +72,7 @@ public class Person{
 		this.birth_date = birth_date;
 	}
 	
-	public int getIdperson()
+	public int getIDPerson()
 	{
 		return idperson;
 	}
@@ -104,107 +105,130 @@ public class Person{
 		return birth_date;
 	}
 	
-	public final void export()																											{
-		try(Writer writer = new OutputStreamWriter(new FileOutputStream(getFirstName() + "_" + getLastName() + ".vcf"), "UTF-8"))		{
-			String string = "BEGIN:VCARD" + "\n"																						;
-			string += "VERSION:4.0" + "\n"																								;
-			string += "UID:" + getIdperson() + "\n"																						;
-			//string += "PHOTO:" + getPicture() + "\n"																					;
-			string += "N:" + getLastName() + ";" + getFirstName() + ";" + "" + ";" + "" +  ";" + "" + "\n"								;
-			string += "FN:" + getFirstName() + " " + getLastName() + "\n"																;
-			string += "NICKNAME:" + getNickname() + "\n"																				;
-			string += "TEL;" + "TYPE=home,voice;" + "VALUE=uri:tel:" + getPhoneNumber() + "\n"											;
-			string += "EMAIL:" + getEmailAddress() + "\n"																				;
-			string += "ADR;" + "TYPE=HOME," + getAddress() + "\n"																		;
-			//string += "CATEGORIES:" + String.join(",", getCategories()) + "\n"														;
-			string += "BDAY:" + getBirthDate() + "\n"																					;
-			string += "END:VCARD"																										;
-			writer.write(string)																										;}
-		catch(Exception e)																												{
-			e.printStackTrace()																											;}}
+	public final void export(File directory)
+	{
+		File file = new File(directory, getFirstName() + "_" + getLastName() + ".vcf");
+		try(Writer writer = new OutputStreamWriter(new FileOutputStream(file.toString()), "UTF-8"))
+		{
+			String string = "BEGIN:VCARD" + "\n";
+			string += "VERSION:4.0" + "\n";
+			string += "UID:" + getIDPerson() + "\n";
+			//string += "PHOTO:" + getPicture() + "\n;
+			string += "N:" + getLastName() + ";" + getFirstName() + ";" + "" + ";" + "" +  ";" + "" + "\n";
+			string += "FN:" + getFirstName() + " " + getLastName() + "\n";
+			string += "NICKNAME:" + getNickname() + "\n";
+			string += "TEL;" + "TYPE=home,voice;" + "VALUE=uri:tel:" + getPhoneNumber() + "\n";
+			string += "EMAIL:" + getEmailAddress() + "\n";
+			string += "ADR;" + "TYPE=HOME," + getAddress() + "\n";
+			//string += "CATEGORIES:" + String.join(",", getCategories()) + "\n";
+			string += "BDAY:" + getBirthDate() + "\n";
+			string += "END:VCARD";
+			writer.write(string);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 	
-	public static final LinkedList<Person> importDirectory() throws IOException															{
-		LinkedList<Person> ListPersons = new LinkedList<>()																				;
-		try (DirectoryStream<Path> listOfPaths = Files.newDirectoryStream(Paths.get("")))												{
-			for(Path element : listOfPaths)																								{
-				if(element.getFileName().toString().endsWith(".vcf"))																	{
-					ListPersons.add(importFile(element.getFileName()))																	;}}}
-		return ListPersons																												;}
-	
-	private static final Person importFile(Path file) throws IOException																{	
-		List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8)															;
-		Iterator<String> line = lines.iterator()																						;
+	public static final Person importFile(File file) throws IOException
+	{
+		List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
+		Iterator<String> line = lines.iterator();
 		
-		if(!line.hasNext())																												{
-			new IOException("The file " + file + " is empty.")																			;}
+		if(!line.hasNext())
+		{
+			new IOException("The file " + file + " is empty.");
+		}
 		
-		int id = -1																														;
-		String lastname = null																											;
-		String firstname = null																											;
-		String nickname = null																											;
-		String phone_number = null																										;
-		String address = null																											;
-		String email_address = null																										;
-		LocalDate birth_date = null																										;
+		int id = -1;
+		String lastname = null;
+		String firstname = null;
+		String nickname = null;
+		String phone_number = null;
+		String address = null;
+		String email_address = null;
+		LocalDate birth_date = null;
+		//String picture = null;
+		//String[] categories = null;
 		
-		while(line.hasNext())																											{
-			String data = line.next()																									;
-			if(data.equals("BEGIN:VCARD") || data.equals("END:VCARD") || data.regionMatches(0, "FN:", 0, 3))							{
-				continue																												;}
+		while(line.hasNext())
+		{
+			String data = line.next();
+			if(data.equals("BEGIN:VCARD") || data.equals("END:VCARD") || data.regionMatches(0, "FN:", 0, 3))
+			{
+				continue;
+			}
 			
-			String[] dataSeperate = data.split(":")																						;
-			switch (dataSeperate[0])																									{
-				case "VERSION"																											:
-					if(!dataSeperate[1].equals("4.0"))																					{
-						new IOException("The file " + file + " is in a wrong version.")													;}
-					break																												;
-				case "UID"																												:
-					id = Integer.parseInt(dataSeperate[1])																				;
-					break																												;
-				case "N"																												:
-					dataSeperate = dataSeperate[1].split(";")																			;
-					lastname = dataSeperate[0]																							;
-					firstname = dataSeperate[1]																							;
-					break																												;
-				case "NICKNAME"																											:
-					nickname = dataSeperate[1]																							;
-					break																												;
-				case "EMAIL"																											:
-					email_address = dataSeperate[1]																						;
-					break																												;
-				case "BDAY"																												:
-					birth_date = LocalDate.parse(dataSeperate[1])																		;
-					break																												;}
+			String[] dataSeperate = data.split(":");
+			switch (dataSeperate[0])
+			{
+				case "VERSION":
+					if(!dataSeperate[1].equals("4.0"))
+					{
+						new IOException("The file " + file + " is in a wrong version.");
+					}
+					break;
+				/*case "PHOTO":
+					picture = dataSeperate[1];
+					break;*/
+				case "UID":
+					id = Integer.parseInt(dataSeperate[1]);
+					break;
+				case "N":
+					dataSeperate = dataSeperate[1].split(";");
+					lastname = dataSeperate[0];
+					firstname = dataSeperate[1];
+					break;
+				case "NICKNAME":
+					nickname = dataSeperate[1];
+					break;
+				case "EMAIL":
+					email_address = dataSeperate[1];
+					break;
+				case "BDAY":
+					birth_date = LocalDate.parse(dataSeperate[1]);
+					break;
+				/*case "CATEGORIES:":
+					categories = dataSeperate[1].split(",");
+					break;*/
+			}
 			
-			dataSeperate = data.split(";")																								;
-			switch (dataSeperate[0])																									{
+			dataSeperate = data.split(";");
+			switch (dataSeperate[0])
+			{
 				case "TEL":
-					phone_number = dataSeperate[2].substring("VALUE=uri:tel:".length())													;
-					break																												;
-				case "ADR"																												:
-					address = dataSeperate[1].substring("TYPE=HOME,".length())															;
-					break																												;}}
+					phone_number = dataSeperate[2].substring("VALUE=uri:tel:".length());
+					break;
+				case "ADR":
+					address = dataSeperate[1].substring("TYPE=HOME,".length());
+					break;
+			}
+		}
 		
-		return new Person(id, lastname, firstname, nickname, phone_number, address, email_address, birth_date)							;}
+		return new Person(id, lastname, firstname, nickname, phone_number, address, email_address, birth_date);
+	}
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public String toString()																											{
-		String string = "\n"																											;
-		string += "BEGIN:VCARD" + "\n"																									;
-		string += "VERSION:4.0" + "\n"																									;
-		string += "UID:" + getIdperson() + "\n"																							;
-		//string += "PHOTO:" + getPicture() + "\n"																						;
-		string += "N:" + getLastName() + ";" + getFirstName() + ";" + "" + ";" + "" +  ";" + "" + "\n"									;
-		string += "FN:" + getFirstName() + " " + getLastName() + "\n"																	;
-		string += "NICKNAME:" + getNickname() + "\n"																					;
-		string += "TEL;" + "TYPE=home,voice;" + "VALUE=uri:tel:" + getPhoneNumber() + "\n"												;
-		string += "EMAIL:" + getEmailAddress() + "\n"																					;
-		string += "ADR;" + "TYPE=HOME," + getAddress() + "\n"																			;
-		//string += "CATEGORIES:" + String.join(",", getCategories()) + "\n"															;
-		string += "BDAY:" + getBirthDate() + "\n"																						;
-		string += "END:VCARD"																											;
-		return string																													;}
+	public String toString()
+	{
+		String string = "\n";
+		string += "BEGIN:VCARD" + "\n";
+		string += "VERSION:4.0" + "\n";
+		string += "UID:" + getIDPerson() + "\n";
+		//string += "PHOTO:" + getPicture() + "\n";
+		string += "N:" + getLastName() + ";" + getFirstName() + ";" + "" + ";" + "" +  ";" + "" + "\n";
+		string += "FN:" + getFirstName() + " " + getLastName() + "\n";
+		string += "NICKNAME:" + getNickname() + "\n";
+		string += "TEL;" + "TYPE=home,voice;" + "VALUE=uri:tel:" + getPhoneNumber() + "\n";
+		string += "EMAIL:" + getEmailAddress() + "\n";
+		string += "ADR;" + "TYPE=HOME," + getAddress() + "\n";
+		//string += "CATEGORIES:" + String.join(",", getCategories()) + "\n";
+		string += "BDAY:" + getBirthDate() + "\n";
+		string += "END:VCARD";
+		return string;
+	}
 }

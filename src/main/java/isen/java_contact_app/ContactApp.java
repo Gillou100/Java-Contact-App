@@ -23,9 +23,6 @@ public class ContactApp extends Application {
 	}
 
 	public static void main(String[] args) throws IOException {
-		//launch(args);
-		/*Person moi = new Person(1, "HUBERT", "Gilles", "Gillou", "non, je ne vous le donnerais pas !", "l'addresse non plus !", "gilles.hubert@isen.yncrea.fr", LocalDate.now());
-		moi.export();*/
-		System.out.println(Person.importDirectory());
+		launch(args);
 	}
 }

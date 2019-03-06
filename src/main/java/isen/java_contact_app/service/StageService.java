@@ -16,11 +16,15 @@ public class StageService {
 	private static class StageServiceHolder {
 		private static final StageService INSTANCE = new StageService();
 	}
-
+	
 	private Stage primaryStage;
 
 	private BorderPane mainLayout;
 
+	public static BorderPane getMainLayoutBorderPane() {
+		return StageServiceHolder.INSTANCE.mainLayout;
+	}
+	
 	public static Stage getPrimaryStage() {
 		return StageServiceHolder.INSTANCE.primaryStage;
 	}
