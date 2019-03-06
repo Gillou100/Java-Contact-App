@@ -1,5 +1,6 @@
 package isen.java_contact_app.service;
 
+import isen.java_contact_app.model.Address;
 import isen.java_contact_app.model.Person;
 import isen.java_contact_app.service.UserService;
 import javafx.collections.FXCollections;
@@ -13,9 +14,9 @@ public class PersonService{
 	private PersonService() {
 		persons = FXCollections.observableArrayList();
 		for (int i = 0; i<1; i++) {
-			persons.add(new Person(1, "lastname1", "firstname1", "nickname1", "phone_number_1", "address1", "email_address_1", LocalDate.now()));
-			persons.add(new Person(1, "lastname2", "firstname2", "nickname2", "phone_number_2", "address2", "email_address_2", LocalDate.now()));
-			persons.add(new Person(1, "lastname3", "firstname3", "nickname3", "phone_number_3", "address3", "email_address_3", LocalDate.now()));
+			persons.add(new Person(1, "lastname1", "firstname1", "nickname1", "phone_number_1", new Address("", "", "address1", "", "", "", ""), "email_address_1", LocalDate.now()));
+			persons.add(new Person(1, "lastname2", "firstname2", "nickname2", "phone_number_2", new Address("", "", "address2", "", "", "", ""), "email_address_2", LocalDate.now()));
+			persons.add(new Person(1, "lastname3", "firstname3", "nickname3", "phone_number_3", new Address("", "", "address3", "", "", "", ""), "email_address_3", LocalDate.now()));
 		}
 	}
 	

@@ -23,7 +23,7 @@ public class Person{
 	private String firstname;
 	private String nickname;
 	private String phone_number;
-	private String address;
+	private Address address;
 	private String email_address;
 	private LocalDate birth_date;
 	
@@ -33,7 +33,7 @@ public class Person{
 		this.nickname = "";
 	}
 	
-	public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, String address, String email_address, LocalDate birth_date) {
+	public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date) {
 		this.idperson = idperson;
 		this.lastname = lastname;
 		this.firstname = firstname;
@@ -60,7 +60,7 @@ public class Person{
 		this.phone_number = phone_number;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 
@@ -93,8 +93,64 @@ public class Person{
 		return phone_number;
 	}
 	
-	public String getAddress() {
+	public Address getAddress() {
 		return address;
+	}
+	
+	/**
+	 * @return the boitePostale
+	 */
+	public final String getBoitePostale()
+	{
+		return getAddress().getBoitePostale();
+	}
+	
+	/**
+	 * @return the adresseEtendue
+	 */
+	public final String getAdresseEtendue()
+	{
+		return getAddress().getAdresseEtendue();
+	}
+	
+	/**
+	 * @return the rue
+	 */
+	public final String getRue()
+	{
+		return getAddress().getRue();
+	}
+	
+	/**
+	 * @return the ville
+	 */
+	public final String getVille()
+	{
+		return getAddress().getVille();
+	}
+	
+	/**
+	 * @return the regionEtatProvince
+	 */
+	public final String getRegionEtatProvince()
+	{
+		return getAddress().getRegionEtatProvince();
+	}
+	
+	/**
+	 * @return the codePostal
+	 */
+	public final String getCodePostal()
+	{
+		return getAddress().getCodePostal();
+	}
+	
+	/**
+	 * @return the pays
+	 */
+	public final String getPays()
+	{
+		return getAddress().getPays();
 	}
 	
 	public String getEmailAddress() {
@@ -119,7 +175,7 @@ public class Person{
 			string += "NICKNAME:" + getNickname() + "\n";
 			string += "TEL;" + "TYPE=home,voice;" + "VALUE=uri:tel:" + getPhoneNumber() + "\n";
 			string += "EMAIL:" + getEmailAddress() + "\n";
-			string += "ADR;" + "TYPE=HOME," + getAddress() + "\n";
+			string += "ADR;" + "TYPE=HOME;" + "LABEL=" + getAddress() + ":" + ";" + ";" + getRue() + ";" + getVille() + ";" + getRegionEtatProvince() + ";" + getCodePostal() + ";" + getPays() + "\n";
 			//string += "CATEGORIES:" + String.join(",", getCategories()) + "\n";
 			string += "BDAY:" + getBirthDate() + "\n";
 			string += "END:VCARD";
@@ -146,7 +202,7 @@ public class Person{
 		String firstname = null;
 		String nickname = null;
 		String phone_number = null;
-		String address = null;
+		Address address = null;
 		String email_address = null;
 		LocalDate birth_date = null;
 		//String picture = null;
@@ -201,11 +257,17 @@ public class Person{
 					phone_number = dataSeperate[2].substring("VALUE=uri:tel:".length());
 					break;
 				case "ADR":
-					address = dataSeperate[1].substring("TYPE=HOME,".length());
+					String boitePostale = (dataSeperate[2].split(":"))[1];
+					String adresseEtendue = dataSeperate[3];
+					String rue = dataSeperate[4];
+					String ville = dataSeperate[5];
+					String regionEtatProvince = dataSeperate[6];
+					String codePostal = dataSeperate[7];
+					String pays = dataSeperate[8];
+					address = new Address(boitePostale, adresseEtendue, rue, ville, regionEtatProvince, codePostal, pays);
 					break;
 			}
 		}
-		
 		return new Person(id, lastname, firstname, nickname, phone_number, address, email_address, birth_date);
 	}
 	
@@ -225,7 +287,7 @@ public class Person{
 		string += "NICKNAME:" + getNickname() + "\n";
 		string += "TEL;" + "TYPE=home,voice;" + "VALUE=uri:tel:" + getPhoneNumber() + "\n";
 		string += "EMAIL:" + getEmailAddress() + "\n";
-		string += "ADR;" + "TYPE=HOME," + getAddress() + "\n";
+		string += "ADR;" + "TYPE=HOME;" + "LABEL=" + getAddress() + ":" + ";" + ";" + getRue() + ";" + getVille() + ";" + getRegionEtatProvince() + ";" + getCodePostal() + ";" + getPays() + "\n";
 		//string += "CATEGORIES:" + String.join(",", getCategories()) + "\n";
 		string += "BDAY:" + getBirthDate() + "\n";
 		string += "END:VCARD";
