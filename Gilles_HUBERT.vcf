@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:4.0
+UID:1
+N:HUBERT;Gilles;;;
+FN:Gilles HUBERT
+NICKNAME:Gillou
+TEL;TYPE=home,voice;VALUE=uri:tel:non, je ne vous le donnerais pas !
+EMAIL:gilles.hubert@isen.yncrea.fr
+ADR;TYPE=HOME,l'addresse non plus !
+BDAY:2019-03-05
+END:VCARD
