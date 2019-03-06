@@ -130,7 +130,6 @@ public class ContactOverviewController{
 	@FXML
 	private void initialize() {
 		System.out.println("initialize");
-		
 		this.nicknameColumn.setCellValueFactory(new NicknameValueFactory());
 		this.nameColumn.setCellValueFactory(new NameValueFactory());
 		this.personTable.setItems(PersonService.getPersons());

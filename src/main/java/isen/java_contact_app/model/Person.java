@@ -58,6 +58,10 @@ public class Person{
 		this.birth_date = birth_date;
 	}
 	
+	public int getIDPerson() {
+		return idperson;
+	}
+	
 	public String getLastName() {
 		return lastname;
 	}
