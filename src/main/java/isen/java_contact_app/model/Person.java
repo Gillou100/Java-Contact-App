@@ -23,20 +23,16 @@ public class Person{
 	private Address address;
 	private String email_address;
 	private LocalDate birth_date;
-	private Hashtable<Category, Boolean> categories = new Hashtable<>(Category.values().length);
+	private Category category;
 	
 	public Person() {
 		this.lastname = "";
 		this.firstname = "";
 		this.nickname = "";
 		this.address = new Address();
-		for (Category categorie : Category.values())
-		{
-			categories.put(categorie, false);
-		}
 	}
 	
-	public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date, Hashtable<Category, Boolean> categories) {
+	public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date, Category category) {
 		this.idperson = idperson;
 		this.lastname = lastname;
 		this.firstname = firstname;
@@ -45,10 +41,7 @@ public class Person{
 		this.address = address;
 		this.email_address = email_address;
 		this.birth_date = birth_date;
-		for (Category category : categories.keySet())
-		{
-			this.categories.put(category, categories.get(category));
-		}
+		this.category = category;
 	}
 	
 	public void setLastName(String lastname) {
@@ -115,38 +108,9 @@ public class Person{
 		this.birth_date = birth_date;
 	}
 	
-	public void setCategories(Hashtable<Category, Boolean> categories)
+	public void setCategory(Category category)
 	{
-		for(Category category : categories.keySet())
-		{
-			this.categories.put(category, categories.get(category));
-		}
-	}
-	
-	public void changeCategory(Category newCategory)
-	{
-		for(Category category : categories.keySet())
-		{
-			categories.put(category, false);
-		}
-		categories.put(newCategory, true);
-	}
-	
-	public void changeCategories(Category[] categories)
-	{
-		for(Category category : this.categories.keySet())
-		{
-			this.categories.put(category, false);
-		}
-		for(Category category : categories)
-		{
-			this.categories.put(category, true);
-		}
-	}
-	
-	public void addCategory(Category category)
-	{
-		categories.put(category, true);
+		this.category = category;
 	}
 	
 	public int getIDPerson()
@@ -174,8 +138,8 @@ public class Person{
 		return address;
 	}
 	
-	public Hashtable<Category, Boolean> getCategory() {
-		return categories;
+	public Category getCategory() {
+		return category;
 	}
 	
 	/**
@@ -257,10 +221,7 @@ public class Person{
 			string += "TEL;" + "TYPE=home,voice;" + "VALUE=uri:tel:" + getPhoneNumber() + "\n";
 			string += "EMAIL:" + getEmailAddress() + "\n";
 			string += "ADR;" + "TYPE=HOME;" + "LABEL=" + getAddress() + ":" + ";" + ";" + getRue() + ";" + getVille() + ";" + getRegionEtatProvince() + ";" + getCodePostal() + ";" + getPays() + "\n";
-			string += "CATEGORIES:" + categories.entrySet().stream()
-					.filter(x -> x.getValue().equals(true))
-					.map(x -> x.getKey().toString())
-					.collect(Collectors.joining(",")) + "\n";
+			string += "CATEGORIES:" + category + "\n";
 			string += "BDAY:" + getBirthDate() + "\n";
 			string += "END:VCARD";
 			writer.write(string);
@@ -290,11 +251,7 @@ public class Person{
 		String email_address = null;
 		LocalDate birth_date = null;
 		//String picture = null;
-		Hashtable<Category, Boolean> categories = new Hashtable<>(Category.values().length);
-		for (Category categorie : Category.values())
-		{
-			categories.put(categorie, false);
-		}
+		Category category = null;
 		
 		while(line.hasNext())
 		{
@@ -334,14 +291,7 @@ public class Person{
 					birth_date = LocalDate.parse(dataSeperate[1]);
 					break;
 				case "CATEGORIES:":
-					String[] categoriesString = dataSeperate[1].split(";");
-					for(String category: categoriesString)
-					{
-						if(Category.valueOf(category) != null)
-						{
-							categories.put(Category.valueOf(category), true);
-						}
-					}
+					category = Category.valueOf(dataSeperate[1]);
 					break;
 			}
 			
@@ -363,7 +313,7 @@ public class Person{
 					break;
 			}
 		}
-		return new Person(id, lastname, firstname, nickname, phone_number, address, email_address, birth_date, categories);
+		return new Person(id, lastname, firstname, nickname, phone_number, address, email_address, birth_date, category);
 	}
 	
 	/* (non-Javadoc)
@@ -383,10 +333,7 @@ public class Person{
 		string += "TEL;" + "TYPE=home,voice;" + "VALUE=uri:tel:" + getPhoneNumber() + "\n";
 		string += "EMAIL:" + getEmailAddress() + "\n";
 		string += "ADR;" + "TYPE=HOME;" + "LABEL=" + getAddress() + ":" + ";" + ";" + getRue() + ";" + getVille() + ";" + getRegionEtatProvince() + ";" + getCodePostal() + ";" + getPays() + "\n";
-		string += "CATEGORIES:" + categories.entrySet().stream()
-				.filter(x -> x.getValue().equals(true))
-				.map(x -> x.getKey().toString())
-				.collect(Collectors.joining(",")) + "\n";
+		string += "CATEGORIES:" + category + "\n";
 		string += "BDAY:" + getBirthDate() + "\n";
 		string += "END:VCARD";
 		return string;

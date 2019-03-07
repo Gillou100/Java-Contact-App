@@ -15,21 +15,10 @@ public class PersonService{
 	
 	private PersonService() {
 		persons = FXCollections.observableArrayList();
-		Hashtable<Category, Boolean> categories1 = new Hashtable<>(Category.values().length);
-		Hashtable<Category, Boolean> categories2 = new Hashtable<>(Category.values().length);
-		Hashtable<Category, Boolean> categories3 = new Hashtable<>(Category.values().length);
-		for (Category category : Category.values())
-		{
-			categories1.put(category, false);
-			categories1.put(category, false);
-			categories1.put(category, false);
-		}
-		categories1.put(Category.FAMILY, true);
-		categories3.put(Category.WORK, true);
 		for (int i = 0; i<1; i++) {
-			persons.add(new Person(1, "lastname1", "firstname1", "nickname1", "phone_number_1", new Address("", "", "address1", "", "", -1, ""), "email_address_1", LocalDate.now(), categories1));
-			persons.add(new Person(1, "lastname2", "firstname2", "nickname2", "phone_number_2", new Address("", "", "address2", "", "", -1, ""), "email_address_2", LocalDate.now(), categories2));
-			persons.add(new Person(1, "lastname3", "firstname3", "nickname3", "phone_number_3", new Address("", "", "address3", "", "", -1, ""), "email_address_3", LocalDate.now(), categories3));
+			persons.add(new Person(1, "lastname1", "firstname1", "nickname1", "phone_number_1", new Address("", "", "address1", "", "", -1, ""), "email_address_1", LocalDate.now(), Category.FAMILY));
+			persons.add(new Person(1, "lastname2", "firstname2", "nickname2", "phone_number_2", new Address("", "", "address2", "", "", -1, ""), "email_address_2", LocalDate.now(), null));
+			persons.add(new Person(1, "lastname3", "firstname3", "nickname3", "phone_number_3", new Address("", "", "address3", "", "", -1, ""), "email_address_3", LocalDate.now(), Category.WORK));
 		}
 	}
 	
