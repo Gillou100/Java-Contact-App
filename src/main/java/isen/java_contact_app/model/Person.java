@@ -8,6 +8,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class Person{
 	private String email_address;
 	private LocalDate birth_date;
 	private Category category;
+	//private Hashtable<Category, Boolean> category;
 	private Image url_photo;
 	
 	public Person() {
@@ -31,9 +33,14 @@ public class Person{
 		this.firstname = "";
 		this.nickname = "";
 		this.address = new Address();
+		/*for (Category categorie : Category.values())
+		{
+			categories.put(categorie, false);
+		}*/
 	}
 	
 	public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date, Category category, Image url_photo) {
+	//public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date, Hashtable<Category, Boolean> categories, Image url_photo) {
 		this.idperson = idperson;
 		this.lastname = lastname;
 		this.firstname = firstname;
@@ -43,6 +50,10 @@ public class Person{
 		this.email_address = email_address;
 		this.birth_date = birth_date;
 		this.category = category;
+		/*for (Category category : categories.keySet())
+		{
+			this.categories.put(category, categories.get(category));
+		}*/
 		this.url_photo = url_photo;
 	}
 	
@@ -68,38 +79,44 @@ public class Person{
 
 	public final void setBoitePostale(String boitePostale)
 	{
-		
-		address = new Address(boitePostale, getAdresseEtendue(), getRue(), getVille(), getRegionEtatProvince(), getCodePostal(), getPays());
+		//address = new Address(boitePostale, getAdresseEtendue(), getRue(), getVille(), getRegionEtatProvince(), getCodePostal(), getPays());
+		address.setBoitePostale(boitePostale);
 	}
 	
 	public final void setAdresseEtendue(String adresseEtendue)
 	{
-		address = new Address(getBoitePostale(), adresseEtendue, getRue(), getVille(), getRegionEtatProvince(), getCodePostal(), getPays());
+		//address = new Address(getBoitePostale(), adresseEtendue, getRue(), getVille(), getRegionEtatProvince(), getCodePostal(), getPays());
+		address.setAdresseEtendue(adresseEtendue);
 	}
 	
 	public final void setRue(String rue)
 	{
-		address = new Address(getBoitePostale(), getAdresseEtendue(), rue, getVille(), getRegionEtatProvince(), getCodePostal(), getPays());
+		//address = new Address(getBoitePostale(), getAdresseEtendue(), rue, getVille(), getRegionEtatProvince(), getCodePostal(), getPays());
+		address.setRue(rue);
 	}
 	
 	public final void setVille(String ville)
 	{
-		address = new Address(getBoitePostale(), getAdresseEtendue(), getRue(), ville, getRegionEtatProvince(), getCodePostal(), getPays());
+		//address = new Address(getBoitePostale(), getAdresseEtendue(), getRue(), ville, getRegionEtatProvince(), getCodePostal(), getPays());
+		address.setVille(ville);
 	}
 	
 	public final void setRegionEtatProvince(String regionEtatProvince)
 	{
-		address = new Address(getBoitePostale(), getAdresseEtendue(), getRue(), getVille(), regionEtatProvince, getCodePostal(), getPays());
+		//address = new Address(getBoitePostale(), getAdresseEtendue(), getRue(), getVille(), regionEtatProvince, getCodePostal(), getPays());
+		address.setRegionEtatProvince(regionEtatProvince);
 	}
 	
 	public final void setCodePostal(int codePostale)
 	{
-		address = new Address(getBoitePostale(), getAdresseEtendue(), getRue(), getVille(), getRegionEtatProvince(), codePostale, getPays());
+		//address = new Address(getBoitePostale(), getAdresseEtendue(), getRue(), getVille(), getRegionEtatProvince(), codePostale, getPays());
+		address.setCodePostal(codePostale);
 	}
 	
 	public final void setPays(String pays)
 	{
-		address = new Address(getBoitePostale(), getAdresseEtendue(), getRue(), getVille(), getRegionEtatProvince(), getCodePostal(), pays);
+		//address = new Address(getBoitePostale(), getAdresseEtendue(), getRue(), getVille(), getRegionEtatProvince(), getCodePostal(), pays);
+		address.setPays(pays);
 	}
 	
 	public void setEmailAddress(String email_address) {
@@ -114,6 +131,40 @@ public class Person{
 	{
 		this.category = category;
 	}
+	
+	/*public void setCategories(Hashtable<Category, Boolean> categories)
+	{
+		for(Category category : categories.keySet())
+		{
+			this.categories.put(category, categories.get(category));
+		}
+	}
+
+	public void changeCategory(Category newCategory)
+	{
+		for(Category category : categories.keySet())
+		{
+			categories.put(category, false);
+		}
+		categories.put(newCategory, true);
+	}
+
+	public void changeCategories(Category[] categories)
+	{
+		for(Category category : this.categories.keySet())
+		{
+			this.categories.put(category, false);
+		}
+		for(Category category : categories)
+		{
+			this.categories.put(category, true);
+		}
+	}
+
+	public void addCategory(Category category)
+	{
+		categories.put(category, true);
+	}*/
 	
 	public void setURLPhoto(Image url_photo)
 	{
@@ -148,6 +199,10 @@ public class Person{
 	public Category getCategory() {
 		return category;
 	}
+	
+	/*public Hashtable<Category, Boolean> getCategory() {
+		return categories;
+	}*/
 	
 	/**
 	 * @return the boitePostale
@@ -226,14 +281,18 @@ public class Person{
 			String string = "BEGIN:VCARD" + "\n";
 			string += "VERSION:4.0" + "\n";
 			string += "UID:" + getIDPerson() + "\n";
-			//string += "PHOTO:" + getPicture() + "\n;
+			string += "PHOTO:" + getURLPhoto() + "\n";
 			string += "N:" + getLastName() + ";" + getFirstName() + ";" + "" + ";" + "" +  ";" + "" + "\n";
 			string += "FN:" + getFirstName() + " " + getLastName() + "\n";
 			string += "NICKNAME:" + getNickname() + "\n";
 			string += "TEL;" + "TYPE=home,voice;" + "VALUE=uri:tel:" + getPhoneNumber() + "\n";
 			string += "EMAIL:" + getEmailAddress() + "\n";
 			string += "ADR;" + "TYPE=HOME;" + "LABEL=" + getAddress() + ":" + ";" + ";" + getRue() + ";" + getVille() + ";" + getRegionEtatProvince() + ";" + getCodePostal() + ";" + getPays() + "\n";
-			string += "CATEGORIES:" + category + "\n";
+			string += "CATEGORIES:" + getCategory() + "\n";
+			/*string += "CATEGORIES:" + categories.entrySet().stream()
+					.filter(x -> x.getValue().equals(true))
+					.map(x -> x.getKey().toString())
+					.collect(Collectors.joining(",")) + "\n";*/
 			string += "BDAY:" + getBirthDate() + "\n";
 			string += "END:VCARD";
 			writer.write(string);
@@ -262,8 +321,13 @@ public class Person{
 		Address address = null;
 		String email_address = null;
 		LocalDate birth_date = null;
-		//String picture = null;
+		Image picture = null;
 		Category category = null;
+		/*Hashtable<Category, Boolean> categories = new Hashtable<>(Category.values().length);
+		for (Category categorie : Category.values())
+		{
+			categories.put(categorie, false);
+		}*/
 		
 		while(line.hasNext())
 		{
@@ -282,9 +346,9 @@ public class Person{
 						new IOException("The file " + file + " is in a wrong version.");
 					}
 					break;
-				/*case "PHOTO":
-					picture = dataSeperate[1];
-					break;*/
+				case "PHOTO":
+					picture = new Image(dataSeperate[1]);
+					break;
 				case "UID":
 					id = Integer.parseInt(dataSeperate[1]);
 					break;
@@ -304,6 +368,14 @@ public class Person{
 					break;
 				case "CATEGORIES:":
 					category = Category.valueOf(dataSeperate[1]);
+					/*String[] categoriesString = dataSeperate[1].split(";");
+					for(String category: categoriesString)
+					{
+						if(Category.valueOf(category) != null)
+						{
+							categories.put(Category.valueOf(category), true);
+						}
+					}*/
 					break;
 			}
 			
@@ -325,7 +397,8 @@ public class Person{
 					break;
 			}
 		}
-		return new Person(id, lastname, firstname, nickname, phone_number, address, email_address, birth_date, category, null);
+		return new Person(id, lastname, firstname, nickname, phone_number, address, email_address, birth_date, category, picture);
+		//return new Person(id, lastname, firstname, nickname, phone_number, address, email_address, birth_date, categories, picture);
 	}
 	
 	/* (non-Javadoc)
@@ -338,14 +411,18 @@ public class Person{
 		string += "BEGIN:VCARD" + "\n";
 		string += "VERSION:4.0" + "\n";
 		string += "UID:" + getIDPerson() + "\n";
-		//string += "PHOTO:" + getPicture() + "\n";
+		string += "PHOTO:" + getURLPhoto() + "\n";
 		string += "N:" + getLastName() + ";" + getFirstName() + ";" + "" + ";" + "" +  ";" + "" + "\n";
 		string += "FN:" + getFirstName() + " " + getLastName() + "\n";
 		string += "NICKNAME:" + getNickname() + "\n";
 		string += "TEL;" + "TYPE=home,voice;" + "VALUE=uri:tel:" + getPhoneNumber() + "\n";
 		string += "EMAIL:" + getEmailAddress() + "\n";
 		string += "ADR;" + "TYPE=HOME;" + "LABEL=" + getAddress() + ":" + ";" + ";" + getRue() + ";" + getVille() + ";" + getRegionEtatProvince() + ";" + getCodePostal() + ";" + getPays() + "\n";
-		string += "CATEGORIES:" + category + "\n";
+		string += "CATEGORIES:" + getCategory() + "\n";
+		/*string += "CATEGORIES:" + categories.entrySet().stream()
+				.filter(x -> x.getValue().equals(true))
+				.map(x -> x.getKey().toString())
+				.collect(Collectors.joining(",")) + "\n";*/
 		string += "BDAY:" + getBirthDate() + "\n";
 		string += "END:VCARD";
 		return string;

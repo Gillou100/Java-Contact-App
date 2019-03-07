@@ -9,13 +9,13 @@ package isen.java_contact_app.model;
  */
 public final class Address
 {
-	private final String boitePostale;
-	private final String adresseEtendue;
-	private final String rue;
-	private final String ville;
-	private final String regionEtatProvince;
-	private final int codePostal;
-	private final String pays;
+	private String boitePostale;
+	private String adresseEtendue;
+	private String rue;
+	private String ville;
+	private String regionEtatProvince;
+	private int codePostal;
+	private String pays;
 	/**
 	 * 
 	 */
@@ -95,6 +95,62 @@ public final class Address
 	public final String getPays()
 	{
 		return this.pays;
+	}
+	
+	/**
+	 * @param boitePostale the boitePostale to set
+	 */
+	public void setBoitePostale(String boitePostale)
+	{
+		this.boitePostale = boitePostale;
+	}
+
+	/**
+	 * @param adresseEtendue the adresseEtendue to set
+	 */
+	public void setAdresseEtendue(String adresseEtendue)
+	{
+		this.adresseEtendue = adresseEtendue;
+	}
+	
+	/**
+	 * @param rue the rue to set
+	 */
+	public void setRue(String rue)
+	{
+		this.rue = rue;
+	}
+
+	/**
+	 * @param ville the ville to set
+	 */
+	public void setVille(String ville)
+	{
+		this.ville = ville;
+	}
+
+	/**
+	 * @param regionEtatProvince the regionEtatProvince to set
+	 */
+	public void setRegionEtatProvince(String regionEtatProvince)
+	{
+		this.regionEtatProvince = regionEtatProvince;
+	}
+
+	/**
+	 * @param codePostal the codePostal to set
+	 */
+	public void setCodePostal(int codePostal)
+	{
+		this.codePostal = codePostal;
+	}
+
+	/**
+	 * @param pays the pays to set
+	 */
+	public void setPays(String pays)
+	{
+		this.pays = pays;
 	}
 	
 	/* (non-Javadoc)

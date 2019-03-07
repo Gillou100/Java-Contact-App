@@ -4,9 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public enum Category {
-	FAMILY,
-	FRIEND,
-	WORK;
+	FAMILY ("Family"),
+	FRIEND ("Friend"),
+	WORK ("Work");
+	
+	private String category;
+	
+	private Category(String category)
+	{
+		this.category = category;
+	}
 	
 	static private ObservableList<Category> categoryList;
 	
@@ -18,5 +25,13 @@ public enum Category {
 		return categoryList;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Enum#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		return category;
+	}
 }
 
