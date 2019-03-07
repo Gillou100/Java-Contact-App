@@ -14,7 +14,7 @@ public final class Address
 	private final String rue;
 	private final String ville;
 	private final String regionEtatProvince;
-	private final String codePostal;
+	private final int codePostal;
 	private final String pays;
 	/**
 	 * 
@@ -26,11 +26,11 @@ public final class Address
 		rue = "";
 		ville = "";
 		regionEtatProvince = "";
-		codePostal = "";
+		codePostal = -1;
 		pays = "";
 	}
 	
-	public Address(String boitePostale, String adresseEtendue, String rue, String ville, String regionEtatProvince, String codePostal, String pays)
+	public Address(String boitePostale, String adresseEtendue, String rue, String ville, String regionEtatProvince, int codePostal, String pays)
 	{
 		this.boitePostale = boitePostale;
 		this.adresseEtendue = adresseEtendue;
@@ -84,7 +84,7 @@ public final class Address
 	/**
 	 * @return the codePostal
 	 */
-	public final String getCodePostal()
+	public final int getCodePostal()
 	{
 		return this.codePostal;
 	}

@@ -62,6 +62,42 @@ public class Person{
 		this.address = address;
 	}
 
+	public final void setBoitePostale(String boitePostale)
+	{
+		
+		address = new Address(boitePostale, getAdresseEtendue(), getRue(), getVille(), getRegionEtatProvince(), getCodePostal(), getPays());
+	}
+	
+	public final void setAdresseEtendue(String adresseEtendue)
+	{
+		address = new Address(getBoitePostale(), adresseEtendue, getRue(), getVille(), getRegionEtatProvince(), getCodePostal(), getPays());
+	}
+	
+	public final void setRue(String rue)
+	{
+		address = new Address(getBoitePostale(), getAdresseEtendue(), rue, getVille(), getRegionEtatProvince(), getCodePostal(), getPays());
+	}
+	
+	public final void setVille(String ville)
+	{
+		address = new Address(getBoitePostale(), getAdresseEtendue(), getRue(), ville, getRegionEtatProvince(), getCodePostal(), getPays());
+	}
+	
+	public final void setRegionEtatProvince(String regionEtatProvince)
+	{
+		address = new Address(getBoitePostale(), getAdresseEtendue(), getRue(), getVille(), regionEtatProvince, getCodePostal(), getPays());
+	}
+	
+	public final void setCodePostal(int codePostale)
+	{
+		address = new Address(getBoitePostale(), getAdresseEtendue(), getRue(), getVille(), getRegionEtatProvince(), codePostale, getPays());
+	}
+	
+	public final void setPays(String pays)
+	{
+		address = new Address(getBoitePostale(), getAdresseEtendue(), getRue(), getVille(), getRegionEtatProvince(), getCodePostal(), pays);
+	}
+	
 	public void setEmailAddress(String email_address) {
 		this.email_address = email_address;
 	}
@@ -146,7 +182,7 @@ public class Person{
 	/**
 	 * @return the codePostal
 	 */
-	public final String getCodePostal()
+	public final int getCodePostal()
 	{
 		return getAddress().getCodePostal();
 	}
@@ -268,7 +304,7 @@ public class Person{
 					String rue = dataSeperate[4];
 					String ville = dataSeperate[5];
 					String regionEtatProvince = dataSeperate[6];
-					String codePostal = dataSeperate[7];
+					int codePostal = Integer.parseInt(dataSeperate[7]);
 					String pays = dataSeperate[8];
 					address = new Address(boitePostale, adresseEtendue, rue, ville, regionEtatProvince, codePostal, pays);
 					break;
