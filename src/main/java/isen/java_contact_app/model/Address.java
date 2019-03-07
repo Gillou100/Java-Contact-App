@@ -3,8 +3,6 @@
  */
 package isen.java_contact_app.model;
 
-import java.util.PrimitiveIterator.OfDouble;
-
 /**
  * @author HUBERT Gilles
  *

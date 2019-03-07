@@ -1,21 +1,32 @@
 package isen.java_contact_app.view;
 
 
+import java.io.File;
 import java.util.Optional;
+
+import javax.imageio.ImageIO;
+
+import isen.java_contact_app.model.Category;
 import isen.java_contact_app.model.Person;
 import isen.java_contact_app.util.NicknameValueFactory;
 import isen.java_contact_app.util.NameValueFactory;
 import isen.java_contact_app.service.PersonService;
 import isen.java_contact_app.service.StageService;
+import isen.java_contact_app.service.UserService;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.scene.control.DatePicker;
 
 public class ContactOverviewController{
@@ -42,13 +53,34 @@ public class ContactOverviewController{
 	TextField phoneNumberField;
 	
 	@FXML
-	TextField addressField;
+	TextField streetAddressField;
+	
+	@FXML
+	TextField pcAddressField;
+	
+	@FXML
+	TextField cityAddressField;
+	
+	@FXML
+	TextField regionAddressField;
+	
+	@FXML
+	TextField countryAddressField;
 
 	@FXML
 	TextField emailAddressField;
 	
 	@FXML
 	DatePicker birthDatePicker;
+	
+	@FXML
+	ComboBox<Category> categoryComboBox;
+	
+	@FXML
+	ImageView photoImageView;
+	
+	@FXML
+	ImageView changePhotoImageView;
 	
 	@FXML
 	Button addButton;
@@ -121,6 +153,7 @@ public class ContactOverviewController{
 		System.out.println("Cancel bouton");
 		this.updatingPerson(false);
 		this.disableButton(false, false);
+		this.showPersonDetails(currentPerson);
 		if (this.newPerson == true) {
 			this.newPerson = false;
 			this.handleDeleteButton();
@@ -145,7 +178,7 @@ public class ContactOverviewController{
 				showPersonDetails(newValue);
 			}
 		});
-				
+		this.categoryComboBox.setItems(Category.initCategoryList());
 	}
 	
 	private void showPersonDetails(Person person) {
@@ -155,18 +188,28 @@ public class ContactOverviewController{
 			this.firstNameField.setText(null);
 			this.nicknameField.setText(null);
 			this.phoneNumberField.setText(null);
-			this.addressField.setText(null);
+			this.streetAddressField.setText(null);
+			this.pcAddressField.setText(null);
+			this.cityAddressField.setText(null);
+			this.regionAddressField.setText(null);
+			this.countryAddressField.setText(null);
 			this.emailAddressField.setText(null);
 			this.birthDatePicker.setValue(null);
+			this.categoryComboBox.setValue(null);
 		}
 		else {
 			this.lastNameField.setText(currentPerson.getLastName());
 			this.firstNameField.setText(currentPerson.getFirstName());
 			this.nicknameField.setText(currentPerson.getNickname());
 			this.phoneNumberField.setText(currentPerson.getPhoneNumber());
-			this.addressField.setText(currentPerson.getAddress());
+			this.streetAddressField.setText(currentPerson.getRue());
+			this.pcAddressField.setText(currentPerson.getCodePostal());
+			this.cityAddressField.setText(currentPerson.getVille());
+			this.regionAddressField.setText(currentPerson.getRegionEtatProvince());
+			this.countryAddressField.setText(currentPerson.getPays());
 			this.emailAddressField.setText(currentPerson.getEmailAddress());
 			this.birthDatePicker.setValue(currentPerson.getBirthDate());
+			this.categoryComboBox.setValue(currentPerson.getCategory());
 		}
 		
 	}
@@ -176,9 +219,14 @@ public class ContactOverviewController{
 		this.currentPerson.setFirstName(firstNameField.getText());
 		this.currentPerson.setNickname(nicknameField.getText());
 		this.currentPerson.setPhoneNumber(phoneNumberField.getText());
-		this.currentPerson.setAddress(addressField.getText());
+		/*this.currentPerson.setRue(streetAddressField.getText());
+		this.currentPerson.setCodePostal(pcAddressField.getText());
+		this.currentPerson.setVille(cityAddressField.getText());
+		this.currentPerson.setRegionEtatProvince(regionAddressField.getText());
+		this.currentPerson.setPays(countryAddressField.getText());*/
 		this.currentPerson.setEmailAddress(emailAddressField.getText());
 		this.currentPerson.setBirthDate(birthDatePicker.getValue());
+		this.currentPerson.setCategory(categoryComboBox.getValue());
 		if (this.newPerson == true) {
 			this.newPerson = false;
 		}
@@ -193,12 +241,37 @@ public class ContactOverviewController{
 		this.nicknameField.setEditable(editable);
 		this.phoneNumberField.setMouseTransparent(!editable);
 		this.phoneNumberField.setEditable(editable);
-		this.addressField.setMouseTransparent(!editable);
-		this.addressField.setEditable(editable);
+		this.streetAddressField.setMouseTransparent(!editable);
+		this.streetAddressField.setEditable(editable);
+		this.pcAddressField.setMouseTransparent(!editable);
+		this.pcAddressField.setEditable(editable);
+		this.cityAddressField.setMouseTransparent(!editable);
+		this.cityAddressField.setEditable(editable);
+		this.regionAddressField.setMouseTransparent(!editable);
+		this.regionAddressField.setEditable(editable);
+		this.countryAddressField.setMouseTransparent(!editable);
+		this.countryAddressField.setEditable(editable);
 		this.emailAddressField.setMouseTransparent(!editable);
 		this.emailAddressField.setEditable(editable);
 		this.birthDatePicker.setMouseTransparent(!editable);
+		this.categoryComboBox.setMouseTransparent(!editable);
+		this.photoImageView.setMouseTransparent(!editable);
+		this.changePhotoImageView.setVisible(editable);
 		this.personTable.setMouseTransparent(editable);
+		if (editable) {
+			this.streetAddressField.setPromptText("Street");
+			this.pcAddressField.setPromptText("PC");
+			this.cityAddressField.setPromptText("City");
+			this.regionAddressField.setPromptText("Region");
+			this.countryAddressField.setPromptText("Country");
+		}
+		else {
+			this.streetAddressField.setPromptText(null);
+			this.pcAddressField.setPromptText(null);
+			this.cityAddressField.setPromptText(null);
+			this.regionAddressField.setPromptText(null);
+			this.countryAddressField.setPromptText(null);
+		}
 	}
 	
 	private void disableButton(boolean none, boolean disable) {
@@ -207,6 +280,38 @@ public class ContactOverviewController{
 		this.deleteButton.setDisable(none ? !disable : disable);
 		this.saveButton.setDisable(!disable);
 		this.cancelButton.setDisable(!disable);
+	}
+	
+	public void changePhoto() {
+		//Image image = new Image(getClass().getClassLoader().getResource(photoFile().getPath());
+		/*System.out.println(getClass());
+		System.out.println(getClass().getClassLoader());*/
+		Alert alert = new Alert(Alert.AlertType.WARNING);
+		alert.initOwner(StageService.getPrimaryStage());
+		alert.setTitle("WARNING");
+		alert.setHeaderText("Tu t'es perdu ? Il ne me semble pas t'avoir demandé de toucher à quelque chose ici :/");
+		alert.showAndWait();
+
+		//this.photoImageView.setImage(image);
+	}
+	
+	public File photoFile() {
+		final FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select the photo to import");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+		File file = null;
+        try{
+        	try{
+        		file = fileChooser.showOpenDialog(StageService.getPrimaryStage());
+	        }catch(IllegalArgumentException e){
+	        	fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+	        	file = fileChooser.showOpenDialog(StageService.getPrimaryStage());
+	        }
+	    }catch (Exception e) {
+	    	e.printStackTrace();
+	    }
+        System.out.println(file);
+        return file;
 	}
 	
 }

@@ -6,17 +6,12 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Person{
-	// Pour l'adresse : recréer une classe pour séprarer proprement boite Postale, numéro, rue...
 	
 	private int idperson;
 	private String lastname;
@@ -26,14 +21,16 @@ public class Person{
 	private Address address;
 	private String email_address;
 	private LocalDate birth_date;
+	private Category category;
 	
 	public Person() {
 		this.lastname = "";
 		this.firstname = "";
 		this.nickname = "";
+		this.address = new Address();
 	}
 	
-	public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date) {
+	public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date, Category category) {
 		this.idperson = idperson;
 		this.lastname = lastname;
 		this.firstname = firstname;
@@ -42,6 +39,7 @@ public class Person{
 		this.address = address;
 		this.email_address = email_address;
 		this.birth_date = birth_date;
+		this.category = category;
 	}
 	
 	public void setLastName(String lastname) {
@@ -72,6 +70,10 @@ public class Person{
 		this.birth_date = birth_date;
 	}
 	
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+	
 	public int getIDPerson()
 	{
 		return idperson;
@@ -95,6 +97,10 @@ public class Person{
 	
 	public Address getAddress() {
 		return address;
+	}
+	
+	public Category getCategory() {
+		return category;
 	}
 	
 	/**
@@ -187,7 +193,7 @@ public class Person{
 		}
 	}
 	
-	public static final Person importFile(File file) throws IOException
+	public static final Person importFile(File file) throws IOException		// Mettre à jour la catégorie
 	{
 		List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
 		Iterator<String> line = lines.iterator();
@@ -268,7 +274,7 @@ public class Person{
 					break;
 			}
 		}
-		return new Person(id, lastname, firstname, nickname, phone_number, address, email_address, birth_date);
+		return new Person(id, lastname, firstname, nickname, phone_number, address, email_address, birth_date, null);
 	}
 	
 	/* (non-Javadoc)

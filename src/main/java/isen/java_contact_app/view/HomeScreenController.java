@@ -29,8 +29,6 @@ public class HomeScreenController {
 	@FXML
 	Text errorText;
 	
-	User currentUser;
-	
 	ObservableList<User> users;
 	
 	boolean newUser;
@@ -56,6 +54,7 @@ public class HomeScreenController {
 				if (user.getUsername().equals(username)) {
 					existingUser = true;
 					if (user.getPassword().equals(password)) {
+						UserService.setCurrentUser(user);
 						PersonService.changeInstance(i);
 						StageService.showView(ViewService.getView("ContactOverview"));
 					}
@@ -84,7 +83,9 @@ public class HomeScreenController {
 					}
 				}
 				if (!existingUser) {
-					this.users.add(new User(username, password, PersonService.newInstance()));
+					User user = new User(username, password, PersonService.newInstance());
+					this.users.add(user);
+					UserService.setCurrentUser(user);
 					StageService.showView(ViewService.getView("ContactOverview"));
 				}
 			}
@@ -114,26 +115,6 @@ public class HomeScreenController {
 			this.usernameField.setPromptText(null);
 			this.passwordField.setPromptText(null);
 		}
-		
-		
-		
-		
-		/*String username = usernameField.getText();
-		String password = passwordField.getText();
-		if (username.isEmpty()) {
-			
-		}
-		else {
-			StageService.showView(ViewService.getView("ContactOverview"));
-		}*/
-		// || password.length() < 6
-		// Password incorrect
-		// This username don't exist         // réécrire l'username dans le textfield
-		// Please enter an username
-		// Password too short (6 characters minimum)
-		// This username already exists
-		// Enter an username
-		// Enter a password
 	}
 
 	@FXML

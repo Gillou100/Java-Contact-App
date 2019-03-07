@@ -6,11 +6,13 @@ public class User{
 	
 	private String username;
 	private String password;
+	private String pathFolderContact;
 	public PersonService personServiceInstance;
 	
 	public User(String username, String password, PersonService personServiceInstance) {
 		this.username = username;
 		this.password = password;
+		this.pathFolderContact = "user.home";
 		this.personServiceInstance = personServiceInstance;
 	}
 	
@@ -20,6 +22,10 @@ public class User{
 	
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public void setPathFolderContact(String pathFolderContact) {
+		this.pathFolderContact = pathFolderContact;
 	}
 	
 	public void setPersonServiceInstance (PersonService personServiceInstance) {
@@ -32,6 +38,10 @@ public class User{
 	
 	public String getPassword() {
 		return password;
+	}
+	
+	public String getPathFolderContact() {
+		return pathFolderContact;
 	}
 	
 	public PersonService getPersonServiceInstance () {
