@@ -7,7 +7,6 @@ import isen.java_contact_app.service.UserService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.time.LocalDate;
-import java.util.Hashtable;
 
 public class PersonService{
 	
@@ -16,9 +15,9 @@ public class PersonService{
 	private PersonService() {
 		persons = FXCollections.observableArrayList();
 		for (int i = 0; i<1; i++) {
-			persons.add(new Person(1, "lastname1", "firstname1", "nickname1", "phone_number_1", new Address("", "", "address1", "", "", -1, ""), "email_address_1", LocalDate.now(), Category.FAMILY));
-			persons.add(new Person(1, "lastname2", "firstname2", "nickname2", "phone_number_2", new Address("", "", "address2", "", "", -1, ""), "email_address_2", LocalDate.now(), null));
-			persons.add(new Person(1, "lastname3", "firstname3", "nickname3", "phone_number_3", new Address("", "", "address3", "", "", -1, ""), "email_address_3", LocalDate.now(), Category.WORK));
+			persons.add(new Person(1, "lastname1", "firstname1", "nickname1", "phone_number_1", new Address("", "", "address1", "", "", -1, ""), "email_address_1", LocalDate.now(), Category.FAMILY, null));
+			persons.add(new Person(1, "lastname2", "firstname2", "nickname2", "phone_number_2", new Address("", "", "address2", "", "", -1, ""), "email_address_2", LocalDate.now(), null, null));
+			persons.add(new Person(1, "lastname3", "firstname3", "nickname3", "phone_number_3", new Address("", "", "address3", "", "", -1, ""), "email_address_3", LocalDate.now(), Category.WORK, null));
 		}
 	}
 	

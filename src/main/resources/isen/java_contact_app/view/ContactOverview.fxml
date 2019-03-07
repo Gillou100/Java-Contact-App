@@ -78,19 +78,19 @@
                   <TextField fx:id="countryAddressField" editable="false" layoutX="204.0" layoutY="271.0" mouseTransparent="true" prefHeight="25.0" prefWidth="97.0" />
                   <TextField fx:id="emailAddressField" editable="false" layoutX="132.0" layoutY="306.0" mouseTransparent="true" />
                   <DatePicker fx:id="birthDatePicker" editable="false" layoutX="132.0" layoutY="341.0" mouseTransparent="true" prefHeight="25.0" prefWidth="149.0" />
-                  <Button fx:id="saveButton" disable="true" layoutX="80.0" layoutY="390.0" mnemonicParsing="false" onAction="#handleSaveButton" text="Save" />
-                  <Button fx:id="cancelButton" disable="true" layoutX="162.0" layoutY="390.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />
                   <ComboBox fx:id="categoryComboBox" layoutX="132.0" layoutY="29.0" mouseTransparent="true" prefWidth="150.0" />
-                  <ImageView fx:id="photoImageView" fitHeight="64.0" fitWidth="51.0" layoutX="23.0" layoutY="16.0" mouseTransparent="true" onMouseClicked="#changePhoto" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="photoImageView" fitHeight="57.0" fitWidth="51.0" layoutX="24.0" layoutY="13.0" mouseTransparent="true" onMouseClicked="#changePhoto" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../image/default-avatar.jpg" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="changePhotoImageView" fitHeight="21.0" fitWidth="14.0" layoutX="60.0" layoutY="49.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" visible="false">
+                  <ImageView fx:id="changePhotoImageView" fitHeight="25.0" fitWidth="14.0" layoutX="24.0" layoutY="13.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
                         <Image url="@../image/change-photo.PNG" />
                      </image>
                   </ImageView>
+                  <Button fx:id="saveButton" disable="true" layoutX="80.0" layoutY="390.0" mnemonicParsing="false" onAction="#handleSaveButton" text="Save" />
+                  <Button fx:id="cancelButton" disable="true" layoutX="162.0" layoutY="390.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />
                </children>
             </AnchorPane>
         </items>

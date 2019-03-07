@@ -2,17 +2,16 @@ package isen.java_contact_app.view;
 
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.Optional;
 
-import javax.imageio.ImageIO;
-
+import isen.java_contact_app.ContactApp;
 import isen.java_contact_app.model.Category;
 import isen.java_contact_app.model.Person;
 import isen.java_contact_app.util.NicknameValueFactory;
 import isen.java_contact_app.util.NameValueFactory;
 import isen.java_contact_app.service.PersonService;
 import isen.java_contact_app.service.StageService;
-import isen.java_contact_app.service.UserService;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -25,7 +24,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.scene.control.DatePicker;
 
@@ -96,6 +94,8 @@ public class ContactOverviewController{
 	
 	@FXML
 	Button cancelButton;
+	
+	final Image defaultImage = new Image(ContactApp.class.getResource("image/default-avatar.jpg").toString());
 	
 	Person currentPerson;
 	
@@ -196,6 +196,7 @@ public class ContactOverviewController{
 			this.emailAddressField.setText(null);
 			this.birthDatePicker.setValue(null);
 			this.categoryComboBox.setValue(null);
+			this.photoImageView.setImage(defaultImage);
 		}
 		else {
 			this.lastNameField.setText(currentPerson.getLastName());
@@ -203,13 +204,18 @@ public class ContactOverviewController{
 			this.nicknameField.setText(currentPerson.getNickname());
 			this.phoneNumberField.setText(currentPerson.getPhoneNumber());
 			this.streetAddressField.setText(currentPerson.getRue());
-			this.pcAddressField.setText(currentPerson.getCodePostal());
+			//this.pcAddressField.setText(currentPerson.getCodePostal());
 			this.cityAddressField.setText(currentPerson.getVille());
 			this.regionAddressField.setText(currentPerson.getRegionEtatProvince());
 			this.countryAddressField.setText(currentPerson.getPays());
 			this.emailAddressField.setText(currentPerson.getEmailAddress());
 			this.birthDatePicker.setValue(currentPerson.getBirthDate());
 			this.categoryComboBox.setValue(currentPerson.getCategory());
+			if (currentPerson.getURLPhoto() == null) {
+				this.photoImageView.setImage(defaultImage);
+			}else {
+				this.photoImageView.setImage(currentPerson.getURLPhoto());
+			}
 		}
 		
 	}
@@ -227,9 +233,11 @@ public class ContactOverviewController{
 		this.currentPerson.setEmailAddress(emailAddressField.getText());
 		this.currentPerson.setBirthDate(birthDatePicker.getValue());
 		this.currentPerson.setCategory(categoryComboBox.getValue());
+		this.currentPerson.setURLPhoto(photoImageView.getImage());		
 		if (this.newPerson == true) {
 			this.newPerson = false;
 		}
+		showPersonDetails(currentPerson);
 	}
 	
 	private void updatingPerson(boolean editable) {
@@ -282,23 +290,20 @@ public class ContactOverviewController{
 		this.cancelButton.setDisable(!disable);
 	}
 	
-	public void changePhoto() {
-		//Image image = new Image(getClass().getClassLoader().getResource(photoFile().getPath());
-		/*System.out.println(getClass());
-		System.out.println(getClass().getClassLoader());*/
-		Alert alert = new Alert(Alert.AlertType.WARNING);
-		alert.initOwner(StageService.getPrimaryStage());
-		alert.setTitle("WARNING");
-		alert.setHeaderText("Tu t'es perdu ? Il ne me semble pas t'avoir demandé de toucher à quelque chose ici :/");
-		alert.showAndWait();
-
-		//this.photoImageView.setImage(image);
+	public void changePhoto() throws MalformedURLException {
+		File photo = photoFile();
+		if (photo != null) {
+			Image image = new Image(photo.toURI().toURL().toString());
+			//System.out.println(ContactApp.class.getResource("image/homescreen.jpg").getClass());
+			this.photoImageView.setImage(image);
+		}
 	}
 	
 	public File photoFile() {
 		final FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select the photo to import");
 		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JPG", "*.jpg"), new FileChooser.ExtensionFilter("PNG", "*.png"));
 		File file = null;
         try{
         	try{
@@ -310,7 +315,6 @@ public class ContactOverviewController{
 	    }catch (Exception e) {
 	    	e.printStackTrace();
 	    }
-        System.out.println(file);
         return file;
 	}
 	

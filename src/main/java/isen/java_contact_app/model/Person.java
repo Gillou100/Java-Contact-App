@@ -8,10 +8,10 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDate;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import javafx.scene.image.Image;
 
 public class Person{
 	
@@ -24,6 +24,7 @@ public class Person{
 	private String email_address;
 	private LocalDate birth_date;
 	private Category category;
+	private Image url_photo;
 	
 	public Person() {
 		this.lastname = "";
@@ -32,7 +33,7 @@ public class Person{
 		this.address = new Address();
 	}
 	
-	public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date, Category category) {
+	public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date, Category category, Image url_photo) {
 		this.idperson = idperson;
 		this.lastname = lastname;
 		this.firstname = firstname;
@@ -42,6 +43,7 @@ public class Person{
 		this.email_address = email_address;
 		this.birth_date = birth_date;
 		this.category = category;
+		this.url_photo = url_photo;
 	}
 	
 	public void setLastName(String lastname) {
@@ -111,6 +113,11 @@ public class Person{
 	public void setCategory(Category category)
 	{
 		this.category = category;
+	}
+	
+	public void setURLPhoto(Image url_photo)
+	{
+		this.url_photo = url_photo;
 	}
 	
 	public int getIDPerson()
@@ -204,6 +211,11 @@ public class Person{
 	
 	public LocalDate getBirthDate() {
 		return birth_date;
+	}
+	
+	public Image getURLPhoto()
+	{
+		return url_photo;
 	}
 	
 	public final void export(File directory)
@@ -313,7 +325,7 @@ public class Person{
 					break;
 			}
 		}
-		return new Person(id, lastname, firstname, nickname, phone_number, address, email_address, birth_date, category);
+		return new Person(id, lastname, firstname, nickname, phone_number, address, email_address, birth_date, category, null);
 	}
 	
 	/* (non-Javadoc)

@@ -32,6 +32,7 @@ public class StageService {
 	public static void initPrimaryStage(Stage primaryStage) {
 		primaryStage.setTitle("Contact App");
 		primaryStage.setScene(new Scene(StageServiceHolder.INSTANCE.mainLayout));
+		primaryStage.setResizable(false);
 		primaryStage.show();
 
 		StageServiceHolder.INSTANCE.primaryStage = primaryStage;
