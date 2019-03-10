@@ -8,11 +8,9 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDate;
-import java.util.Hashtable;
+//import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-
-import javafx.scene.image.Image;
 
 public class Person{
 	
@@ -26,7 +24,7 @@ public class Person{
 	private LocalDate birth_date;
 	private Category category;
 	//private Hashtable<Category, Boolean> category;
-	private Image url_photo;
+	private String url_photo;
 	
 	public Person() {
 		this.lastname = "";
@@ -39,7 +37,7 @@ public class Person{
 		}*/
 	}
 	
-	public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date, Category category, Image url_photo) {
+	public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date, Category category, String url_photo) {
 	//public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date, Hashtable<Category, Boolean> categories, Image url_photo) {
 		this.idperson = idperson;
 		this.lastname = lastname;
@@ -166,7 +164,7 @@ public class Person{
 		categories.put(category, true);
 	}*/
 	
-	public void setURLPhoto(Image url_photo)
+	public void setURLPhoto(String url_photo)
 	{
 		this.url_photo = url_photo;
 	}
@@ -268,7 +266,7 @@ public class Person{
 		return birth_date;
 	}
 	
-	public Image getURLPhoto()
+	public String getURLPhoto()
 	{
 		return url_photo;
 	}
@@ -303,7 +301,7 @@ public class Person{
 		}
 	}
 	
-	public static final Person importFile(File file) throws IOException		// Mettre à jour la catégorie
+	public static final Person importFile(File file) throws IOException
 	{
 		List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
 		Iterator<String> line = lines.iterator();
@@ -321,7 +319,7 @@ public class Person{
 		Address address = null;
 		String email_address = null;
 		LocalDate birth_date = null;
-		Image picture = null;
+		String picture = null;
 		Category category = null;
 		/*Hashtable<Category, Boolean> categories = new Hashtable<>(Category.values().length);
 		for (Category categorie : Category.values())
@@ -347,7 +345,7 @@ public class Person{
 					}
 					break;
 				case "PHOTO":
-					picture = new Image(dataSeperate[1]);
+					picture = dataSeperate[1];
 					break;
 				case "UID":
 					id = Integer.parseInt(dataSeperate[1]);

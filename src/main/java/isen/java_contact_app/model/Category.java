@@ -4,34 +4,21 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public enum Category {
-	FAMILY ("Family"),
-	FRIEND ("Friend"),
-	WORK ("Work");
-	
-	private String category;
-	
-	private Category(String category)
-	{
-		this.category = category;
-	}
+	ALL,
+	FAMILY,
+	FRIEND,
+	WORK;
 	
 	static private ObservableList<Category> categoryList;
 	
-	public static final ObservableList<Category> initCategoryList() {
+	public static final ObservableList<Category> initCategoryList(boolean all) {
 		categoryList = FXCollections.observableArrayList();
+		if(all) categoryList.add(Category.ALL);
 		categoryList.add(Category.FAMILY);
 		categoryList.add(Category.FRIEND);
 		categoryList.add(Category.WORK);
 		return categoryList;
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Enum#toString()
-	 */
-	@Override
-	public String toString()
-	{
-		return category;
-	}
 }
 

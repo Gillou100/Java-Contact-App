@@ -78,10 +78,10 @@ public class MainLayoutController {
 			if (directory != null) {
 				UserService.getCurrentUser().setPathFolderContact(directory.getParent());
 				File[] files = directory.listFiles();
-				PersonService.deleteListPerson();
+				PersonService.clearPersons();
 				for (int i = 0; i < files.length; i++) {
 					if (files[i].getAbsolutePath().endsWith("vcf")) {
-						PersonService.addPerson(Person.importFile(files[i]));
+						PersonService.addPerson(Person.importFile(files[i]), true);
 					}
 				}
 			}

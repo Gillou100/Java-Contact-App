@@ -6,7 +6,7 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isen.java_contact_app.view.MainLayoutController">
+<BorderPane prefHeight="460.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isen.java_contact_app.view.MainLayoutController">
 	<top>
 		<MenuBar BorderPane.alignment="CENTER">
 			<menus>

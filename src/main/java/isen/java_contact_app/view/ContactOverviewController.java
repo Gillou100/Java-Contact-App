@@ -4,6 +4,7 @@ package isen.java_contact_app.view;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 import isen.java_contact_app.ContactApp;
 import isen.java_contact_app.model.Category;
@@ -22,6 +23,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -95,7 +97,18 @@ public class ContactOverviewController{
 	@FXML
 	Button cancelButton;
 	
-	final Image defaultImage = new Image(ContactApp.class.getResource("image/default-avatar.jpg").toString());
+	@FXML
+	ComboBox<Category> filterComboBox;
+	
+	@FXML
+	TextField filterTextField;
+	
+	@FXML
+	Button filterButton;
+	
+	private final Image defaultPhoto = new Image(ContactApp.class.getResource("image/default-photo.jpg").toString());
+	
+	private String urlChangePhoto;
 	
 	Person currentPerson;
 	
@@ -105,7 +118,7 @@ public class ContactOverviewController{
 	private void handleAddButton() {
 		System.out.println("Add bouton");
 		Person person = new Person();
-		PersonService.addPerson(person);
+		PersonService.addPerson(person, true);
 		this.personTable.getSelectionModel().select(person);
 		this.newPerson = true;
 		this.handleUpdateButton();
@@ -121,16 +134,15 @@ public class ContactOverviewController{
 	@FXML
 	private void handleDeleteButton() {
 		System.out.println("Delete bouton");
-		int selectedIndex = this.personTable.getSelectionModel().getSelectedIndex();
-	    if (selectedIndex >= 0) {
+		Person person = this.personTable.getSelectionModel().getSelectedItem();
+	    if (person != null) {
 	    	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.initOwner(StageService.getPrimaryStage());
 			alert.setTitle("WARNING");
 			alert.setHeaderText("You are going to delete this contact, continue ?");
 			Optional<ButtonType> option = alert.showAndWait();
 			if (option.get() == ButtonType.OK) {
-				
-		        personTable.getItems().remove(selectedIndex);
+				PersonService.deletePerson(person);
 		        this.personTable.getSelectionModel().clearSelection();
 		        this.disableButton(true, false);
 		        this.personTable.refresh();
@@ -151,6 +163,7 @@ public class ContactOverviewController{
 	@FXML
 	private void handleCancelButton() {
 		System.out.println("Cancel bouton");
+		this.urlChangePhoto = null;
 		this.updatingPerson(false);
 		this.disableButton(false, false);
 		this.showPersonDetails(currentPerson);
@@ -161,11 +174,18 @@ public class ContactOverviewController{
 	}
 	
 	@FXML
+	private void handleFilterButton() {
+		PersonService.filterPersons(this.filterTextField.getText().toLowerCase(), this.filterComboBox.getValue());
+		this.personTable.refresh();
+	}
+	
+	@FXML
 	private void initialize() {
 		System.out.println("initialize");
 		this.nicknameColumn.setCellValueFactory(new NicknameValueFactory());
 		this.nameColumn.setCellValueFactory(new NameValueFactory());
 		this.personTable.setItems(PersonService.getPersons());
+		PersonService.filterPersons(null, Category.ALL);
 		this.personTable.refresh();
 		birthDatePicker.setShowWeekNumbers(false);
 		
@@ -178,7 +198,24 @@ public class ContactOverviewController{
 				showPersonDetails(newValue);
 			}
 		});
-		this.categoryComboBox.setItems(Category.initCategoryList());
+		this.categoryComboBox.setItems(Category.initCategoryList(false));
+		this.filterComboBox.setItems(Category.initCategoryList(true));
+		this.filterComboBox.getSelectionModel().select(Category.ALL);
+		
+		UnaryOperator<TextFormatter.Change> integerOnlyFilter = change -> {
+			String text = change.getText();
+			if (text.isEmpty() || text == null) return change;
+			for (int i = 0; i<text.length(); i++) {
+				if (!String.valueOf(text.charAt(i)).matches("[0-9]")) return null;
+			}
+			return change;
+		};
+		
+		TextFormatter<Integer> pcAddressIntegerOnlyFormatter = new TextFormatter<Integer>(integerOnlyFilter);
+		this.pcAddressField.setTextFormatter(pcAddressIntegerOnlyFormatter);
+		TextFormatter<Integer> phoneNumberIntegerOnlyFormatter = new TextFormatter<Integer>(integerOnlyFilter);
+		this.phoneNumberField.setTextFormatter(phoneNumberIntegerOnlyFormatter);
+		
 	}
 	
 	private void showPersonDetails(Person person) {
@@ -196,7 +233,7 @@ public class ContactOverviewController{
 			this.emailAddressField.setText(null);
 			this.birthDatePicker.setValue(null);
 			this.categoryComboBox.setValue(null);
-			this.photoImageView.setImage(defaultImage);
+			this.photoImageView.setImage(defaultPhoto);
 		}
 		else {
 			this.lastNameField.setText(currentPerson.getLastName());
@@ -204,7 +241,7 @@ public class ContactOverviewController{
 			this.nicknameField.setText(currentPerson.getNickname());
 			this.phoneNumberField.setText(currentPerson.getPhoneNumber());
 			this.streetAddressField.setText(currentPerson.getRue());
-			//this.pcAddressField.setText(currentPerson.getCodePostal());
+			this.pcAddressField.setText(currentPerson.getCodePostal() == -1 ? null : String.valueOf(currentPerson.getCodePostal()));
 			this.cityAddressField.setText(currentPerson.getVille());
 			this.regionAddressField.setText(currentPerson.getRegionEtatProvince());
 			this.countryAddressField.setText(currentPerson.getPays());
@@ -212,9 +249,14 @@ public class ContactOverviewController{
 			this.birthDatePicker.setValue(currentPerson.getBirthDate());
 			this.categoryComboBox.setValue(currentPerson.getCategory());
 			if (currentPerson.getURLPhoto() == null) {
-				this.photoImageView.setImage(defaultImage);
-			}else {
-				this.photoImageView.setImage(currentPerson.getURLPhoto());
+				this.photoImageView.setImage(defaultPhoto);
+			}
+			else {
+				try {
+					this.photoImageView.setImage(new Image(currentPerson.getURLPhoto()));
+				}catch(NullPointerException|IllegalArgumentException e) {
+					this.photoImageView.setImage(defaultPhoto);
+				}
 			}
 		}
 		
@@ -225,15 +267,15 @@ public class ContactOverviewController{
 		this.currentPerson.setFirstName(firstNameField.getText());
 		this.currentPerson.setNickname(nicknameField.getText());
 		this.currentPerson.setPhoneNumber(phoneNumberField.getText());
-		/*this.currentPerson.setRue(streetAddressField.getText());
-		this.currentPerson.setCodePostal(pcAddressField.getText());
+		this.currentPerson.setRue(streetAddressField.getText());
+		this.currentPerson.setCodePostal((pcAddressField.getText() == null || pcAddressField.getText().isEmpty()) ? -1 : Integer.parseInt(pcAddressField.getText()));
 		this.currentPerson.setVille(cityAddressField.getText());
 		this.currentPerson.setRegionEtatProvince(regionAddressField.getText());
-		this.currentPerson.setPays(countryAddressField.getText());*/
+		this.currentPerson.setPays(countryAddressField.getText());
 		this.currentPerson.setEmailAddress(emailAddressField.getText());
 		this.currentPerson.setBirthDate(birthDatePicker.getValue());
 		this.currentPerson.setCategory(categoryComboBox.getValue());
-		this.currentPerson.setURLPhoto(photoImageView.getImage());		
+		this.currentPerson.setURLPhoto(this.urlChangePhoto);
 		if (this.newPerson == true) {
 			this.newPerson = false;
 		}
@@ -266,6 +308,10 @@ public class ContactOverviewController{
 		this.photoImageView.setMouseTransparent(!editable);
 		this.changePhotoImageView.setVisible(editable);
 		this.personTable.setMouseTransparent(editable);
+		this.filterTextField.setEditable(!editable);
+		this.filterTextField.setMouseTransparent(editable);
+		this.filterComboBox.setDisable(editable);
+		this.filterComboBox.setMouseTransparent(editable);
 		if (editable) {
 			this.streetAddressField.setPromptText("Street");
 			this.pcAddressField.setPromptText("PC");
@@ -286,16 +332,18 @@ public class ContactOverviewController{
 		this.addButton.setDisable(disable);
 		this.updateButton.setDisable(none ? !disable : disable);
 		this.deleteButton.setDisable(none ? !disable : disable);
+		this.filterButton.setDisable(disable);
 		this.saveButton.setDisable(!disable);
 		this.cancelButton.setDisable(!disable);
 	}
 	
 	public void changePhoto() throws MalformedURLException {
-		File photo = photoFile();
-		if (photo != null) {
-			Image image = new Image(photo.toURI().toURL().toString());
+		File imageFile = photoFile();
+		if (imageFile != null) {
+			this.urlChangePhoto = imageFile.toURI().toURL().toString();
+			Image photo = new Image(this.urlChangePhoto);
 			//System.out.println(ContactApp.class.getResource("image/homescreen.jpg").getClass());
-			this.photoImageView.setImage(image);
+			this.photoImageView.setImage(photo);
 		}
 	}
 	
