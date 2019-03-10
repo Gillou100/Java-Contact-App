@@ -285,7 +285,7 @@ public class Person{
 			string += "NICKNAME:" + getNickname() + "\n";
 			string += "TEL;" + "TYPE=home,voice;" + "VALUE=uri:tel:" + getPhoneNumber() + "\n";
 			string += "EMAIL:" + getEmailAddress() + "\n";
-			string += "ADR;" + "TYPE=HOME;" + "LABEL=" + getAddress() + ":" + ";" + ";" + getRue() + ";" + getVille() + ";" + getRegionEtatProvince() + ";" + getCodePostal() + ";" + getPays() + "\n";
+			string += "ADR;" + "TYPE=HOME;" + "LABEL=\"" + getAddress() + "\":" + ";" + ";" + getRue() + ";" + getVille() + ";" + getRegionEtatProvince() + ";" + (getCodePostal() < 0 ? "" : getCodePostal()) + ";" + getPays() + "\n";
 			string += "CATEGORIES:" + getCategory() + "\n";
 			/*string += "CATEGORIES:" + categories.entrySet().stream()
 					.filter(x -> x.getValue().equals(true))
@@ -330,69 +330,93 @@ public class Person{
 		while(line.hasNext())
 		{
 			String data = line.next();
-			if(data.equals("BEGIN:VCARD") || data.equals("END:VCARD") || data.regionMatches(0, "FN:", 0, 3))
+			if(data.equals("BEGIN:VCARD") || data.regionMatches(0, "FN:", 0, 3))
 			{
 				continue;
 			}
-			
-			String[] dataSeperate = data.split(":");
-			switch (dataSeperate[0])
+			else if(data.equals("END:VCARD"))
 			{
-				case "VERSION":
-					if(!dataSeperate[1].equals("4.0"))
-					{
-						new IOException("The file " + file + " is in a wrong version.");
-					}
-					break;
-				case "PHOTO":
-					picture = dataSeperate[1];
-					break;
-				case "UID":
-					id = Integer.parseInt(dataSeperate[1]);
-					break;
-				case "N":
-					dataSeperate = dataSeperate[1].split(";");
-					lastname = dataSeperate[0];
-					firstname = dataSeperate[1];
-					break;
-				case "NICKNAME":
-					nickname = dataSeperate[1];
-					break;
-				case "EMAIL":
-					email_address = dataSeperate[1];
-					break;
-				case "BDAY":
-					birth_date = LocalDate.parse(dataSeperate[1]);
-					break;
-				case "CATEGORIES:":
-					category = Category.valueOf(dataSeperate[1]);
-					/*String[] categoriesString = dataSeperate[1].split(";");
-					for(String category: categoriesString)
-					{
-						if(Category.valueOf(category) != null)
-						{
-							categories.put(Category.valueOf(category), true);
-						}
-					}*/
-					break;
+				break;
 			}
 			
-			dataSeperate = data.split(";");
-			switch (dataSeperate[0])
+			else
 			{
-				case "TEL":
-					phone_number = dataSeperate[2].substring("VALUE=uri:tel:".length());
-					break;
-				case "ADR":
-					String boitePostale = (dataSeperate[2].split(":"))[1];
-					String adresseEtendue = dataSeperate[3];
-					String rue = dataSeperate[4];
-					String ville = dataSeperate[5];
-					String regionEtatProvince = dataSeperate[6];
-					int codePostal = Integer.parseInt(dataSeperate[7]);
-					String pays = dataSeperate[8];
-					address = new Address(boitePostale, adresseEtendue, rue, ville, regionEtatProvince, codePostal, pays);
-					break;
+				String[] dataSeperate = data.split(":");
+				switch (dataSeperate[0])
+				{
+					case "VERSION":
+						if(!dataSeperate[1].equals("4.0"))
+						{
+							new IOException("The file " + file + " is in a wrong version.");
+						}
+						break;
+					case "PHOTO":
+						picture = dataSeperate[1];
+						break;
+					case "UID":
+						id = Integer.parseInt(dataSeperate[1]);
+						break;
+					case "N":
+						dataSeperate = dataSeperate[1].split(";");
+						lastname = dataSeperate[0];
+						firstname = dataSeperate[1];
+						break;
+					case "NICKNAME":
+						nickname = dataSeperate[1];
+						break;
+					case "EMAIL":
+						email_address = dataSeperate[1];
+						break;
+					case "BDAY":
+						birth_date = LocalDate.parse(dataSeperate[1]);
+						break;
+					case "CATEGORIES:":
+						category = Category.valueOf(dataSeperate[1]);
+						/*String[] categoriesString = dataSeperate[1].split(";");
+						for(String category: categoriesString)
+						{
+							if(Category.valueOf(category) != null)
+							{
+								categories.put(Category.valueOf(category), true);
+							}
+						}*/
+						break;
+				}
+				
+				dataSeperate = data.split(";");
+				switch (dataSeperate[0])
+				{
+					case "TEL":
+						phone_number = dataSeperate[2].substring("VALUE=uri:tel:".length());
+						break;
+					case "ADR":
+						String pays = "";
+						int codePostal = -1;
+						String regionEtatProvince = "";
+						String ville = "";
+						String rue = "";
+						String adresseEtendue = "";
+						String boitePostale = "";
+						switch(dataSeperate.length)
+						{
+							case 9:
+								pays = dataSeperate[8];
+							case 8:
+								codePostal = Integer.parseInt(dataSeperate[7]);
+							case 7:
+								regionEtatProvince = dataSeperate[6];
+							case 6:
+								ville = dataSeperate[5];
+							case 5:
+								rue = dataSeperate[4];
+							case 4:
+								adresseEtendue = dataSeperate[3];
+							case 3:
+								boitePostale = dataSeperate[2].split(":").length > 1 ? dataSeperate[2].split(":")[1] : "";
+						}
+						address = new Address(boitePostale, adresseEtendue, rue, ville, regionEtatProvince, codePostal, pays);
+						break;
+				}
 			}
 		}
 		return new Person(id, lastname, firstname, nickname, phone_number, address, email_address, birth_date, category, picture);
@@ -415,7 +439,7 @@ public class Person{
 		string += "NICKNAME:" + getNickname() + "\n";
 		string += "TEL;" + "TYPE=home,voice;" + "VALUE=uri:tel:" + getPhoneNumber() + "\n";
 		string += "EMAIL:" + getEmailAddress() + "\n";
-		string += "ADR;" + "TYPE=HOME;" + "LABEL=" + getAddress() + ":" + ";" + ";" + getRue() + ";" + getVille() + ";" + getRegionEtatProvince() + ";" + getCodePostal() + ";" + getPays() + "\n";
+		string += "ADR;" + "TYPE=HOME;" + "LABEL=" + getAddress() + ":" + ";" + ";" + getRue() + ";" + getVille() + ";" + getRegionEtatProvince() + ";" + (getCodePostal() < 0 ? "" : getCodePostal()) + ";" + getPays() + "\n";
 		string += "CATEGORIES:" + getCategory() + "\n";
 		/*string += "CATEGORIES:" + categories.entrySet().stream()
 				.filter(x -> x.getValue().equals(true))
