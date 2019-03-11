@@ -351,7 +351,7 @@ public class Person{
 						}
 						break;
 					case "PHOTO":
-						picture = dataSeperate[1];
+						picture = dataSeperate[1] + ":" + dataSeperate[2] + ":" + dataSeperate[3];
 						break;
 					case "UID":
 						id = Integer.parseInt(dataSeperate[1]);
@@ -370,7 +370,7 @@ public class Person{
 					case "BDAY":
 						birth_date = LocalDate.parse(dataSeperate[1]);
 						break;
-					case "CATEGORIES:":
+					case "CATEGORIES":
 						category = Category.valueOf(dataSeperate[1]);
 						/*String[] categoriesString = dataSeperate[1].split(";");
 						for(String category: categoriesString)
