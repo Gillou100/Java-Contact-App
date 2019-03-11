@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="460.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isen.java_contact_app.view.MainLayoutController">
+	<top>
+		<MenuBar BorderPane.alignment="CENTER">
+			<menus>
+				<Menu mnemonicParsing="false" onShowing="#updateMenu" text="File">
+					<items>
+                  <MenuItem fx:id="importDataMenuItem" mnemonicParsing="false" onAction="#importData" text="Import Data" />
+					<MenuItem fx:id="exportDataMenuItem" mnemonicParsing="false" onAction="#exportData" text="Export Data" />
+					<SeparatorMenuItem fx:id="separatorMenuItem" mnemonicParsing="false" visible="false" />
+                  <MenuItem fx:id="changeUserMenuItem" mnemonicParsing="false" onAction="#changeUser" text="Change user" />
+						<MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Close" />
+                  		
+						
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+	</top>
+</BorderPane>
