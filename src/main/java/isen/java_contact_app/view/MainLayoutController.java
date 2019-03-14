@@ -58,7 +58,7 @@ public class MainLayoutController {
 			newDirectory.mkdirs();
 			for(Person person : PersonService.getPersons())
 			{
-				person.export(newDirectory);
+				PersonService.export(newDirectory, person);
 			}
 		}
 	}
@@ -81,7 +81,7 @@ public class MainLayoutController {
 				PersonService.clearPersons();
 				for (int i = 0; i < files.length; i++) {
 					if (files[i].getAbsolutePath().endsWith("vcf")) {
-						PersonService.addPerson(Person.importFile(files[i]), true);
+						PersonService.addPerson(PersonService.importFile(files[i]), true);
 					}
 				}
 			}
