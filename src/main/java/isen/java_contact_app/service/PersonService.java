@@ -21,10 +21,15 @@ import java.util.List;
 
 public class PersonService{
 	
+	// Liste de personnes filtrés de l'utilisateur
 	private ObservableList<Person> persons;
 
+	// Liste de personnes entière de l'utilisateur
 	private ObservableList<Person> personsDataBase;
 	
+	/*
+	 * Initialisation des listes
+	 */
 	private PersonService() {
 		personsDataBase = FXCollections.observableArrayList();
 		persons = FXCollections.observableArrayList();
@@ -46,6 +51,11 @@ public class PersonService{
 		}
 	}
 	
+	/*
+	 * Mise à jour de la liste de personnes filtrées
+	 * @param : textFilter -> texte entré comparé au surnom, nom et prénom de chaque utilisateur (+ combinaison nom/prénom dans les 2 sens)
+	 * 			categoryFilter -> Categorie sélectionnée comparée à celle de chaque personne
+	 */
 	public static void filterPersons(String textFilter, Category categoryFilter) {
 		if(PersonServiceHolder.INSTANCE.persons != null) PersonService.clearPersons();
 		for (Person person : PersonServiceHolder.INSTANCE.personsDataBase) {
@@ -60,36 +70,66 @@ public class PersonService{
 		}
 	}
 	
+	/*
+	 * Retourne la liste des personnes filtrées
+	 */
 	public static ObservableList<Person> getPersons() {
 		return PersonServiceHolder.INSTANCE.persons;
 	}
 	
+	/*
+	 * Ajout d'une nouvelle personne à la liste
+	 * @param : person -> la personne à ajouter
+	 * 			newPerson -> Si la personne ajoutée l'est seulement pour la liste filtrée ou pour la database aussi
+	 */
 	public static void addPerson(Person person, boolean newPerson) {
 		if(newPerson) PersonServiceHolder.INSTANCE.personsDataBase.add(person);
 		PersonServiceHolder.INSTANCE.persons.add(person);
 	}
 	
+	/*
+	 * Supprimer une personne
+	 * @param : person -> La personne a supprimé de la liste filtrée et de la database
+	 */
 	public static void deletePerson(Person person) {
 		PersonServiceHolder.INSTANCE.personsDataBase.remove(person);
 		PersonServiceHolder.INSTANCE.persons.remove(person);
 	}
 	
+	/*
+	 * Effacer la liste des personnes filtrées
+	 */
 	public static void clearPersons() {
 		if(PersonServiceHolder.INSTANCE.persons != null) PersonServiceHolder.INSTANCE.persons.clear();
 	}
 	
+	/*
+	 * Création d'une nouvelle instance de personnes et la retourne
+	 */
 	public static PersonService newInstance() {
 		return PersonServiceHolder.INSTANCE = new PersonService();
 	}
 	
+	/*
+	 * Changer l'instance selon l'utilisateur connectée
+	 * @param : indexInstance -> Position de l'utilisateur identifiée dans la liste des utilisateurs
+	 */
 	public static void changeInstance(int indexInstance) {
 		PersonServiceHolder.INSTANCE = UserService.getUsers().get(indexInstance).getPersonServiceInstance();
 	}
 	
+	/*
+	 * Création d'une sous-classe permettant l'utilisation d'instance
+	 */
 	private static class PersonServiceHolder {
 		private static PersonService INSTANCE;
 	}
 	
+	/*
+	 * Export les données des personnes de la liste de personnes filtrées
+	 * @param : directory -> chemin absolu vers le dossier où ajouter la fiche de la personne
+	 * 			Person -> personne dont la fiche doit être créé
+	 */
 	public static final void export(File directory, Person person)
 	{
 		File file = new File(directory, person.getFirstName() + "_" + person.getLastName() + ".vcf");
@@ -103,6 +143,10 @@ public class PersonService{
 		}
 	}
 	
+	/*
+	 * Récupération des informations de la fiche d'une personne et retourne la personne créé
+	 * @param : file -> fichier de la personne
+	 */
 	public static final Person importFile(File file) throws IOException
 	{
 		List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);

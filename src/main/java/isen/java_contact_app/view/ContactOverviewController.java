@@ -114,9 +114,11 @@ public class ContactOverviewController{
 	
 	private boolean newPerson;
 	
+	/*
+	 * Ajouter une personne dans la liste des contacts
+	 */
 	@FXML
 	private void handleAddButton() {
-		System.out.println("Add bouton");
 		Person person = new Person();
 		PersonService.addPerson(person, true);
 		this.personTable.getSelectionModel().select(person);
@@ -124,16 +126,20 @@ public class ContactOverviewController{
 		this.handleUpdateButton();
 	}
 	
+	/*
+	 * Activer la modification des informations d'une person
+	 */
 	@FXML
 	private void handleUpdateButton() {
-		System.out.println("Update bouton");
 		this.updatingPerson(true);
 		this.disableButton(false, true);
 	}
 	
+	/*
+	 * Supprimer la personne sélectionnée de la liste des contacts
+	 */
 	@FXML
 	private void handleDeleteButton() {
-		System.out.println("Delete bouton");
 		Person person = this.personTable.getSelectionModel().getSelectedItem();
 	    if (person != null) {
 	    	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -150,9 +156,11 @@ public class ContactOverviewController{
 	    }
 	}
 	
+	/*
+	 * Sauvegarder les changements sur les informations d'une personne
+	 */
 	@FXML
 	private void handleSaveButton() {
-		System.out.println("Save bouton");
 		this.updatingPerson(false);
 		this.disableButton(false, false);
 		this.personTable.setDisable(false);
@@ -160,9 +168,11 @@ public class ContactOverviewController{
 		this.personTable.refresh();
 	}
 	
+	/*
+	 * Annuler les changements sur les informations d'une personne
+	 */
 	@FXML
 	private void handleCancelButton() {
-		System.out.println("Cancel bouton");
 		this.urlChangePhoto = null;
 		this.updatingPerson(false);
 		this.disableButton(false, false);
@@ -173,15 +183,20 @@ public class ContactOverviewController{
 		}
 	}
 	
+	/*
+	 * Actualise la liste des personnes affichées selon les paramètres de filtrage indiqués
+	 */
 	@FXML
 	private void handleFilterButton() {
 		PersonService.filterPersons(this.filterTextField.getText().toLowerCase(), this.filterComboBox.getValue());
 		this.personTable.refresh();
 	}
 	
+	/*
+	 * Initialisation spécifique de certains élèments de l'interface
+	 */
 	@FXML
 	private void initialize() {
-		System.out.println("initialize");
 		this.nicknameColumn.setCellValueFactory(new NicknameValueFactory());
 		this.nameColumn.setCellValueFactory(new NameValueFactory());
 		this.personTable.setItems(PersonService.getPersons());
@@ -193,7 +208,6 @@ public class ContactOverviewController{
 
 			@Override
 			public void changed(ObservableValue<? extends Person> observable, Person oldValue, Person newValue) {
-				System.out.println("passage");
 				disableButton(false, false);
 				showPersonDetails(newValue);
 			}
@@ -218,6 +232,10 @@ public class ContactOverviewController{
 		
 	}
 	
+	/*
+	 * Afficher les détails de la personne sélectionnée
+	 * @param: person -> la personne actuellement sélectionnée
+	 */
 	private void showPersonDetails(Person person) {
 		this.currentPerson = person;
 		if (currentPerson == null) {
@@ -262,6 +280,9 @@ public class ContactOverviewController{
 		
 	}
 	
+	/*
+	 * Récupérer les différents informations d'une personne afin de les sauvegarder
+	 */
 	private void savePersonDetails() {
 		this.currentPerson.setLastName(lastNameField.getText());
 		this.currentPerson.setFirstName(firstNameField.getText());
@@ -282,6 +303,10 @@ public class ContactOverviewController{
 		showPersonDetails(currentPerson);
 	}
 	
+	/*
+	 * Rendre l'intéraction avec certains élèments de l'interface possible ou non
+	 * @param : editable -> Vrai pour permettre à l'utilisateur de modifier les informations de la personne, faux dans l'autre cas
+	 */
 	private void updatingPerson(boolean editable) {
 		this.lastNameField.setMouseTransparent(!editable);
 		this.lastNameField.setEditable(editable);
@@ -328,6 +353,11 @@ public class ContactOverviewController{
 		}
 	}
 	
+	/*
+	 * Rendre l'intéraction avec certains boutons de l'interface possible ou non
+	 * @param : none -> Vrai si aucune personne est sélectionnée, Faux dans l'autre cas
+	 * 			disable -> Vrai si l'utilisateur modifie les informations d'une personne, Faux dans l'autre cas
+	 */
 	private void disableButton(boolean none, boolean disable) {
 		this.addButton.setDisable(disable);
 		this.updateButton.setDisable(none ? !disable : disable);
@@ -337,6 +367,9 @@ public class ContactOverviewController{
 		this.cancelButton.setDisable(!disable);
 	}
 	
+	/*
+	 * Modifier la photo associée à une personne
+	 */
 	public void changePhoto() throws MalformedURLException {
 		File imageFile = photoFile();
 		if (imageFile != null) {
@@ -347,6 +380,9 @@ public class ContactOverviewController{
 		}
 	}
 	
+	/*
+	 * Importer le lien vers la photo à afficher
+	 */
 	public File photoFile() {
 		final FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select the photo to import");

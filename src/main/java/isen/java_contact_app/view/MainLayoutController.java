@@ -34,15 +34,24 @@ public class MainLayoutController {
 	
 	String pathFolder;
 	
+	/*
+	 * Ferme la fenêtre
+	 */
 	public void closeApplication() {
 		StageService.closeStage();
 	}
 
+	/*
+	 * Retourne à l'écran d'accueil
+	 */
 	public void changeUser() {
 		UserService.setCurrentUser(null);
 		StageService.showView(ViewService.getView("HomeScreen"));
 	}
 
+	/*
+	 * Crée le dossier pour l'export des personens
+	 */
 	public void exportData()
 	{
 		System.out.println("exportation des données");
@@ -63,9 +72,9 @@ public class MainLayoutController {
 		}
 	}
 	
-	
-	
-	
+	/*
+	 * Récupére chaque fichier VCard (.vcf) du dossier sélectioné	
+	 */
 	public void importData() throws IOException{
 		System.out.println("importation des données");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -88,7 +97,10 @@ public class MainLayoutController {
     	}
 	}
 	
-	
+	/*
+	 * Permet d'ouvrir l'explorateur de dossier et de sélectionner celui voulu
+	 * @param : action -> Personnaliser le message de titre de la fenêtre
+	 */
 	public File dataFolder(String action) {
 		final DirectoryChooser directoryChooser = new DirectoryChooser();
 		directoryChooser.setTitle("Select the contact's folder to " + action);
@@ -107,9 +119,9 @@ public class MainLayoutController {
         return directory;
 	}
 	
-	
-	
-	
+	/*
+	 * Mettre à jour le menu selon la vue actuelle de l'interface
+	 */
 	public void updateMenu() {
 		if (ViewService.actualView == "HomeScreen") {
 			visibleMenu(false);
@@ -119,6 +131,10 @@ public class MainLayoutController {
 		}		
 	}
 	
+	/*
+	 * Afficher ou non certains éléments du menu
+	 * @param : visible -> les éléments seront visibles
+	 */
 	private void visibleMenu(boolean visible) {
 		importDataMenuItem.setVisible(visible);
 		exportDataMenuItem.setVisible(visible);
