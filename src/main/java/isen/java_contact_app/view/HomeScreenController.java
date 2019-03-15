@@ -33,6 +33,10 @@ public class HomeScreenController {
 	
 	boolean newUser;
 	
+	/*
+	 * Cas 1 : Vérifie les informations entrées afin de donner l'accès à la database correspondate de l'utilisateur ou non
+	 * Cas 2 : Crée un nouvel utilisateur et lui crée une database
+	 */
 	@FXML
 	public void handleContinueButton() throws Exception {
 		System.out.println("vérifier les informations entrées");
@@ -92,6 +96,10 @@ public class HomeScreenController {
 		}
 	}
 	
+	/*
+	 * Cas 1 : Passer à la présentation de nouvel utilisateur
+	 * Cas 2 : Passer à la présentation de login d'un utilisateur existant
+	 */
 	@FXML
 	public void handleNewUserButton() throws Exception {
 		System.out.println("Ajouter nouvelle utilisateur");
