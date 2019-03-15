@@ -1,4 +1,4 @@
-package fr.isen.java2.db.daos;
+package isen.java_contact_app.db.daos;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -9,8 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.isen.java2.db.entities.Film;
-import fr.isen.java2.db.entities.Genre;
+import isen.java_contact_app.db.entities.Film;
+import isen.java_contact_app.db.entities.Genre;
 
 /**
  * @author Philippe Duval

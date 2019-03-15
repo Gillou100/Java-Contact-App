@@ -1,4 +1,4 @@
-package fr.isen.java2.db.entities;
+package isen.java_contact_app.db.entities;
 
 public class Genre {
 	private Integer id;

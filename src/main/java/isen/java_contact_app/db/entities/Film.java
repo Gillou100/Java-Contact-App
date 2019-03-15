@@ -1,4 +1,4 @@
-package fr.isen.java2.db.entities;
+package isen.java_contact_app.db.entities;
 
 import java.time.LocalDate;
 

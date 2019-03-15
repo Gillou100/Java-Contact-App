@@ -1,4 +1,4 @@
-package fr.isen.java2.db.daos;
+package isen.java_contact_app.db.daos;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
@@ -8,12 +8,12 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
 
-import fr.isen.java2.db.daos.DataSourceFactory;
+import isen.java_contact_app.db.daos.DataSourceFactory;
 import org.junit.Before;
 import org.junit.Test;
 
-import fr.isen.java2.db.daos.GenreDao;
-import fr.isen.java2.db.entities.Genre;
+import isen.java_contact_app.db.daos.GenreDao;
+import isen.java_contact_app.db.entities.Genre;
 
 public class GenreDaoTestCase {
 

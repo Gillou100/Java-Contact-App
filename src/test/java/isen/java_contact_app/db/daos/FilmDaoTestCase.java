@@ -1,4 +1,4 @@
-package fr.isen.java2.db.daos;
+package isen.java_contact_app.db.daos;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,8 +13,8 @@ import java.util.function.Predicate;
 import org.junit.Before;
 import org.junit.Test;
 
-import fr.isen.java2.db.entities.Film;
-import fr.isen.java2.db.entities.Genre;
+import isen.java_contact_app.db.entities.Film;
+import isen.java_contact_app.db.entities.Genre;
 
 public class FilmDaoTestCase {
 	@Before
