@@ -1,9 +1,9 @@
 package isen.java_contact_app.service;
 
 import isen.java_contact_app.model.Address;
-import isen.java_contact_app.model.Category;
 import isen.java_contact_app.model.Person;
 import isen.java_contact_app.service.UserService;
+import isen.java_contact_app.util.Category;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
