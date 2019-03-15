@@ -1,32 +1,27 @@
-package isen.java_contact_app.model;
+package isen.java_contact_app.entities;
 
-//import java.io.File;
-//import java.io.FileOutputStream;
-//import java.io.IOException;
-//import java.io.OutputStreamWriter;
-//import java.io.Writer;
-//import java.nio.charset.StandardCharsets;
-//import java.nio.file.Files;
 import java.time.LocalDate;
-////import java.util.Hashtable;
-//import java.util.Iterator;
-//import java.util.List;
+//import java.util.Hashtable;
+
+import isen.java_contact_app.util.Category;
 
 public class Person{
 	
-	private int idperson;
+	private Integer id;
+	private Integer user_id;
 	private String lastname;
 	private String firstname;
 	private String nickname;
 	private String phone_number;
-	private Address address;
 	private String email_address;
 	private LocalDate birth_date;
+	private String url_photo;
 	private Category category;
 	//private Hashtable<Category, Boolean> category;
-	private String url_photo;
+	private Address address;
 	
 	public Person() {
+		this.id = -1;
 		this.lastname = "";
 		this.firstname = "";
 		this.nickname = "";
@@ -37,9 +32,10 @@ public class Person{
 		}*/
 	}
 	
-	public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date, Category category, String url_photo) {
+	public Person(Integer user_id, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date, Category category, String url_photo) {
 	//public Person(int idperson, String lastname, String firstname, String nickname, String phone_number, Address address, String email_address, LocalDate birth_date, Hashtable<Category, Boolean> categories, Image url_photo) {
-		this.idperson = idperson;
+		this.id = -1;
+		this.user_id = user_id;
 		this.lastname = lastname;
 		this.firstname = firstname;
 		this.nickname = nickname;
@@ -53,6 +49,14 @@ public class Person{
 			this.categories.put(category, categories.get(category));
 		}*/
 		this.url_photo = url_photo;
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setUser_id(Integer user_id) {
+		this.user_id = user_id;
 	}
 	
 	public void setLastName(String lastname) {
@@ -169,11 +173,14 @@ public class Person{
 		this.url_photo = url_photo;
 	}
 	
-	public int getIDPerson()
+	public Integer getId()
 	{
-		return idperson;
+		return id;
 	}
-	
+	public Integer getUser_id() {
+		return user_id;
+	}
+
 	public String getLastName() {
 		return lastname;
 	}
@@ -280,7 +287,7 @@ public class Person{
 		String string = "\n";
 		string += "BEGIN:VCARD" + "\n";
 		string += "VERSION:4.0" + "\n";
-		string += "UID:" + getIDPerson() + "\n";
+		string += "UID:" + getId() + "\n";
 		string += "PHOTO:" + getURLPhoto() + "\n";
 		string += "N:" + getLastName() + ";" + getFirstName() + ";" + "" + ";" + "" +  ";" + "" + "\n";
 		string += "FN:" + getFirstName() + " " + getLastName() + "\n";

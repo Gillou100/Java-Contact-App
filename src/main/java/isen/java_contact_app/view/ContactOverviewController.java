@@ -7,9 +7,9 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import isen.java_contact_app.ContactApp;
-import isen.java_contact_app.model.Category;
-import isen.java_contact_app.model.Person;
+import isen.java_contact_app.entities.Person;
 import isen.java_contact_app.util.NicknameValueFactory;
+import isen.java_contact_app.util.Category;
 import isen.java_contact_app.util.NameValueFactory;
 import isen.java_contact_app.service.PersonService;
 import isen.java_contact_app.service.StageService;
@@ -120,7 +120,7 @@ public class ContactOverviewController{
 	@FXML
 	private void handleAddButton() {
 		Person person = new Person();
-		PersonService.addPerson(person, true);
+		PersonService.addPerson(person);
 		this.personTable.getSelectionModel().select(person);
 		this.newPerson = true;
 		this.handleUpdateButton();
@@ -188,7 +188,7 @@ public class ContactOverviewController{
 	 */
 	@FXML
 	private void handleFilterButton() {
-		PersonService.filterPersons(this.filterTextField.getText().toLowerCase(), this.filterComboBox.getValue());
+		PersonService.setFilter(this.filterTextField.getText().toLowerCase(), this.filterComboBox.getValue());
 		this.personTable.refresh();
 	}
 	
@@ -199,8 +199,8 @@ public class ContactOverviewController{
 	private void initialize() {
 		this.nicknameColumn.setCellValueFactory(new NicknameValueFactory());
 		this.nameColumn.setCellValueFactory(new NameValueFactory());
-		this.personTable.setItems(PersonService.getPersons());
-		PersonService.filterPersons(null, Category.ALL);
+		this.personTable.setItems(PersonService.personList());
+		PersonService.clearFilters();
 		this.personTable.refresh();
 		birthDatePicker.setShowWeekNumbers(false);
 		

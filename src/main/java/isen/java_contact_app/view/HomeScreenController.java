@@ -1,10 +1,10 @@
 package isen.java_contact_app.view;
 
-import isen.java_contact_app.model.User;
 import isen.java_contact_app.service.ViewService;
+import isen.java_contact_app.daos.UserDao;
+import isen.java_contact_app.entities.User;
 import isen.java_contact_app.service.PersonService;
 import isen.java_contact_app.service.StageService;
-import isen.java_contact_app.service.UserService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -29,8 +29,6 @@ public class HomeScreenController {
 	@FXML
 	Text errorText;
 	
-	ObservableList<User> users;
-	
 	boolean newUser;
 	
 	/*
@@ -52,14 +50,11 @@ public class HomeScreenController {
 		}
 		
 		else if (this.newUser == false) {
-			User user;
-			for (int i = 0; i<this.users.size(); i++) {
-				user = this.users.get(i);
+			for (User user : UserDao.usersList()) {
 				if (user.getUsername().equals(username)) {
 					existingUser = true;
 					if (user.getPassword().equals(password)) {
-						UserService.setCurrentUser(user);
-						PersonService.changeInstance(i);
+						PersonService.setCurrentUser(user);
 						StageService.showView(ViewService.getView("ContactOverview"));
 					}
 					else {
@@ -79,17 +74,18 @@ public class HomeScreenController {
 				this.errorText.setText("Password too short (6 characters minimum)");
 			}
 			else {
-				for (int i = 0; i<this.users.size(); i++) {
-					if (this.users.get(i).getUsername().equals(username)) {
+				ObservableList<User> users = UserDao.usersList();
+				for (int i = 0; i<users.size(); i++) {
+					if (users.get(i).getUsername().equals(username)) {
 						this.errorText.setText("This username already exists");
 						existingUser = true;
 						break;
 					}
 				}
 				if (!existingUser) {
-					User user = new User(username, password, PersonService.newInstance());
-					this.users.add(user);
-					UserService.setCurrentUser(user);
+					User user = new User(username, password);
+					UserDao.addUser(user);
+					PersonService.setCurrentUser(user);
 					StageService.showView(ViewService.getView("ContactOverview"));
 				}
 			}
@@ -127,7 +123,6 @@ public class HomeScreenController {
 
 	@FXML
 	private void initialize() {
-		this.users = UserService.getUsers();
 		this.newUser = false;
 	}
 	

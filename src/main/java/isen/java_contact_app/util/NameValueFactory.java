@@ -1,6 +1,6 @@
 package isen.java_contact_app.util;
 
-import isen.java_contact_app.model.Person;
+import isen.java_contact_app.entities.Person;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn;

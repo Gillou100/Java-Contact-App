@@ -1,6 +1,6 @@
 package isen.java_contact_app.view;
 
-import isen.java_contact_app.model.Person;
+import isen.java_contact_app.entities.Person;
 import isen.java_contact_app.service.PersonService;
 import javafx.fxml.FXML;
 
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import isen.java_contact_app.service.StageService;
-import isen.java_contact_app.service.UserService;
+import isen.java_contact_app.service.VcardService;
 import isen.java_contact_app.service.ViewService;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -45,7 +45,7 @@ public class MainLayoutController {
 	 * Retourne à l'écran d'accueil
 	 */
 	public void changeUser() {
-		UserService.setCurrentUser(null);
+		PersonService.setCurrentUser(null);
 		StageService.showView(ViewService.getView("HomeScreen"));
 	}
 
@@ -57,7 +57,7 @@ public class MainLayoutController {
 		System.out.println("exportation des données");
 		File directory = dataFolder("export");
 		if (directory != null) {
-			UserService.getCurrentUser().setPathFolderContact(directory.getPath());
+			PersonService.getCurrentUser().setPathFolderContact(directory.getPath());
 			File newDirectory = new File(directory, LocalDate.now().toString());
 			int numberInstanceDirectory = 2;
 			while (newDirectory.exists()) {
@@ -65,9 +65,9 @@ public class MainLayoutController {
 				numberInstanceDirectory++;
 			}
 			newDirectory.mkdirs();
-			for(Person person : PersonService.getPersons())
+			for(Person person : PersonService.personList())
 			{
-				PersonService.export(newDirectory, person);
+				VcardService.export(newDirectory, person);
 			}
 		}
 	}
@@ -85,12 +85,12 @@ public class MainLayoutController {
 		if (option.get() == ButtonType.OK) {
 			File directory = dataFolder("import");
 			if (directory != null) {
-				UserService.getCurrentUser().setPathFolderContact(directory.getParent());
+				PersonService.getCurrentUser().setPathFolderContact(directory.getParent());
 				File[] files = directory.listFiles();
-				PersonService.clearPersons();
+				PersonService.clearFilters();
 				for (int i = 0; i < files.length; i++) {
 					if (files[i].getAbsolutePath().endsWith("vcf")) {
-						PersonService.addPerson(PersonService.importFile(files[i]), true);
+						PersonService.addPerson(VcardService.importFile(files[i]));
 					}
 				}
 			}
@@ -104,7 +104,7 @@ public class MainLayoutController {
 	public File dataFolder(String action) {
 		final DirectoryChooser directoryChooser = new DirectoryChooser();
 		directoryChooser.setTitle("Select the contact's folder to " + action);
-		directoryChooser.setInitialDirectory(new File(UserService.getCurrentUser().getPathFolderContact()));
+		directoryChooser.setInitialDirectory(new File(PersonService.getCurrentUser().getPathFolderContact()));
 		File directory = null;
         try{
         	try{

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package isen.java_contact_app.model;
+package isen.java_contact_app.entities;
 
 /**
  * @author HUBERT Gilles
@@ -9,12 +9,13 @@ package isen.java_contact_app.model;
  */
 public final class Address
 {
+	private Integer id;
 	private String boitePostale;
 	private String adresseEtendue;
 	private String rue;
 	private String ville;
 	private String regionEtatProvince;
-	private int codePostal;
+	private Integer codePostal;
 	private String pays;
 	/**
 	 * 
@@ -41,6 +42,13 @@ public final class Address
 		this.pays = pays;
 	}
 	
+	/**
+	 * @return the database id
+	 */
+	public Integer getId() {
+		return id;
+	}
+
 	/**
 	 * @return the boitePostale
 	 */
@@ -84,7 +92,7 @@ public final class Address
 	/**
 	 * @return the codePostal
 	 */
-	public final int getCodePostal()
+	public final Integer getCodePostal()
 	{
 		return this.codePostal;
 	}
@@ -95,6 +103,13 @@ public final class Address
 	public final String getPays()
 	{
 		return this.pays;
+	}
+	
+	/**
+	 * @param the database id to set
+	 */
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 	/**
@@ -140,7 +155,7 @@ public final class Address
 	/**
 	 * @param codePostal the codePostal to set
 	 */
-	public void setCodePostal(int codePostal)
+	public void setCodePostal(Integer codePostal)
 	{
 		this.codePostal = codePostal;
 	}

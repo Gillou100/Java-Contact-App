@@ -1,19 +1,21 @@
-package isen.java_contact_app.model;
-
-import isen.java_contact_app.service.PersonService;
+package isen.java_contact_app.entities;
 
 public class User{
 	
+	private Integer id;
 	private String username;
 	private String password;
 	private String pathFolderContact;
-	public PersonService personServiceInstance;
 	
-	public User(String username, String password, PersonService personServiceInstance) {
+	public User(String username, String password) {
+		this.id = -1;
 		this.username = username;
 		this.password = password;
 		this.pathFolderContact = "user.home";
-		this.personServiceInstance = personServiceInstance;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 	public void setUsername(String username) {
@@ -28,8 +30,8 @@ public class User{
 		this.pathFolderContact = pathFolderContact;
 	}
 	
-	public void setPersonServiceInstance (PersonService personServiceInstance) {
-		this.personServiceInstance = personServiceInstance;
+	public Integer getId() {
+		return id;
 	}
 	
 	public String getUsername() {
@@ -44,12 +46,7 @@ public class User{
 		return pathFolderContact;
 	}
 	
-	public PersonService getPersonServiceInstance () {
-		return personServiceInstance;
-	}
-	
 	public boolean equals(User user) {
 		return (this.username.equals(user.username) && this.password.equals(user.password));
 	}
-	
 }
