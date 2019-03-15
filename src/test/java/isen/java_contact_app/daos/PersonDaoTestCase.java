@@ -25,21 +25,21 @@ public class PersonDaoTestCase {
 		Connection connection = DataSourceFactory.getDataSource().getConnection();
 		Statement stmt = connection.createStatement();
 		stmt.executeUpdate("DELETE FROM person");
-		stmt.executeUpdate("DELETE FROM genre");
+		stmt.executeUpdate("DELETE FROM address");
 
 		//personsDataBase.add(new Person(1, "lastname1", "firstname1", "nickname1", "0665487562", new Address("", "", "address1", "", "", -1, ""), "email_address_1", LocalDate.now(), Category.FAMILY/*categories1*/, null));
 		//personsDataBase.add(new Person(1, "lastname2", "firstname2", "nickname2", "0654423025", new Address("", "", "address2", "", "", -1, ""), "email_address_2", LocalDate.now(), null/*categories2*/, null));
 		//personsDataBase.add(new Person(1, "lastname3", "firstname3", "nickname3", "0744512325", new Address("", "", "address3", "", "", -1, ""), "email_address_3", LocalDate.now(), Category.WORK/*categories3*/, "C"));
 
-		stmt.executeUpdate("INSERT INTO genre(idgenre,name) VALUES (1,'Drama')");
-		stmt.executeUpdate("INSERT INTO genre(idgenre,name) VALUES (2,'Comedy')");
-		stmt.executeUpdate("INSERT INTO genre(idgenre,name) VALUES (2,'Comedy')");
+		stmt.executeUpdate("INSERT INTO address(idaddress,name) VALUES (1,'Drama')");
+		stmt.executeUpdate("INSERT INTO address(idaddress,name) VALUES (2,'Comedy')");
+		stmt.executeUpdate("INSERT INTO address(idaddress,name) VALUES (2,'Comedy')");
 		
-		stmt.executeUpdate("INSERT INTO person(idperson,title, release_date, genre_id, duration, director, summary) "
+		stmt.executeUpdate("INSERT INTO person(idperson,title, release_date, address_id, duration, director, summary) "
 				+ "VALUES (1, 'Title 1', '2015-11-26', 1, 120, 'director 1', 'summary of the first person')");
-		stmt.executeUpdate("INSERT INTO person(idperson,title, release_date, genre_id, duration, director, summary) "
+		stmt.executeUpdate("INSERT INTO person(idperson,title, release_date, address_id, duration, director, summary) "
 				+ "VALUES (2, 'My Title 2', '2015-11-14', 2, 114, 'director 2', 'summary of the second person')");
-		stmt.executeUpdate("INSERT INTO person(idperson,title, release_date, genre_id, duration, director, summary) "
+		stmt.executeUpdate("INSERT INTO person(idperson,title, release_date, address_id, duration, director, summary) "
 				+ "VALUES (3, 'Third title', '2015-12-12', 2, 176, 'director 3', 'summary of the third person')");
 		stmt.close();
 		connection.close();
@@ -56,18 +56,18 @@ public class PersonDaoTestCase {
 	}
 
 	@Test
-	public void shouldListPersonsByGenre() {
+	public void shouldListPersonsByCurrentUser() {
 		// GIVEN we have a person DAO ready to take orders
 		PersonDao personDao = new PersonDao();
-		// WHEN we call our DAO to get persons with the "Comedy" Genre
-		List<Person> personList = personDao.listPersonsByGenre("Comedy");
-		// THEN our list should contains 2 items of genre Comedy
+		// WHEN we call our DAO to get persons with the "Comedy" username
+		List<Person> personList = personDao.listPersonsByaddress("Comedy");
+		// THEN our list should contains 1 items of address Comedy
 		assertThat(personList).hasSize(2).doesNotContainNull();
 		assertThat(personList).allMatch(new Predicate<Person>() {
 			@Override
 			public boolean test(Person t) {
 
-				return t.getGenre().getName().equals("Comedy");
+				return t.getaddress().getName().equals("Comedy");
 			}
 		});
 	}
@@ -76,7 +76,7 @@ public class PersonDaoTestCase {
 	public void shouldAddPerson() throws Exception {
 		// GIVEN we have a person DAO ready to take orders and a person to add
 		PersonDao personDao = new PersonDao();
-		Person personToCreate = new Person(Integer.valueOf(42), "Halloween", LocalDate.of(1978, 10, 25), new Genre(2, "Comedy"),
+		Person personToCreate = new Person(Integer.valueOf(42), "Halloween", LocalDate.of(1978, 10, 25), new address(2, "Comedy"),
 				Integer.valueOf(120), "John Carpenter", "Some advert for sharp knives");
 		// WHEN we call our DAO to
 		Person newPerson = personDao.addPerson(personToCreate);
@@ -113,7 +113,7 @@ public class PersonDaoTestCase {
 		assertThat(newPerson.getTitle()).isEqualTo(personToCreate.getTitle());
 		assertThat(newPerson.getSummary()).isEqualTo(personToCreate.getSummary());
 		assertThat(newPerson.getReleaseDate()).isEqualTo(personToCreate.getReleaseDate());
-		assertThat(newPerson.getGenre()).isEqualTo(personToCreate.getGenre());
+		assertThat(newPerson.getaddress()).isEqualTo(personToCreate.getaddress());
 		assertThat(newPerson.getDuration()).isEqualTo(personToCreate.getDuration());
 		assertThat(newPerson.getDirector()).isEqualTo(personToCreate.getDirector());
 	}

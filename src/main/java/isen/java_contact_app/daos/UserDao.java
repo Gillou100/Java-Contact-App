@@ -19,8 +19,26 @@ import isen.java_contact_app.entities.Address;
 public class UserDao {
 
 	static public ObservableList<User> usersList(){
-		// TODO Auto-generated method stub
-		return null;
+		ObservableList<User> userList = new ObservableList<User>();
+		try (Connection cnx = DataSourceFactory.getDataSource().getConnection()) {
+			try (PreparedStatement stmt = cnx.prepareStatement(
+					"SELECT * FROM film JOIN genre ON film.genre_id = genre.idgenre WHERE genre.name = ?")) {
+				stmt.setString(1, genreName);
+				try (ResultSet results = stmt.executeQuery()) {
+					while (results.next()) {
+						Film film = new Film(results.getInt("idfilm"), results.getString("title"),
+								results.getDate("release_date").toLocalDate(),
+								new Genre(results.getInt("genre_id"), results.getString("name")),
+								Integer.valueOf(results.getInt("duration")), results.getString("director"),
+								results.getString("summary"));
+						byGenre.add(film);
+					}
+					return byGenre;
+				}
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException("Oops", e);
+		}
 	}
 	
 	static public void addUser(User newUser) {
