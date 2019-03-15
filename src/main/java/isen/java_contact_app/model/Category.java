@@ -1,4 +1,4 @@
-package isen.java_contact_app.util;
+package isen.java_contact_app.model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

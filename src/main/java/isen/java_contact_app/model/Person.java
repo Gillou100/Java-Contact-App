@@ -12,8 +12,6 @@ import java.time.LocalDate;
 //import java.util.Iterator;
 //import java.util.List;
 
-import isen.java_contact_app.util.Category;
-
 public class Person{
 	
 	private int idperson;
